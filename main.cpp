@@ -23,7 +23,7 @@ int main(int argc, char* argv[])
     Line().set_surface(&surface);
     Ball().set_surface(&surface);
     std::cout << W << std::endl;
-    Path p(W - 1, H, 0, H / 2);
+    Path p(W - 50, H - 50, 50, H / 2);
     Ball().set_path(&p);
     std::list< Ball * > ball;
     p.set_surface(&surface);
@@ -82,6 +82,7 @@ int main(int argc, char* argv[])
         }
         //ball->draw();
         surface.unlock();
+        
         surface.flip();
         int end = getTicks();
         int dt = RATE - end + start;

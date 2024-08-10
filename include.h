@@ -14,5 +14,6 @@
 #include "Surface.h"
 #include "Event.h"
 #include "GameObject.h"
-#include "QuadTree.h"
-#include "TreeNode.h"
+#include "Line.h"
+#include "Path.h"
+#include "Tower.h"

@@ -7,6 +7,133 @@ void Tower::set_surface(Surface * surface)
     surface_ = surface;
 }
 
+
+
+void Tower::rotate()
+{
+    a_ += da_;
+    if (a_ > 3.1414 * 2)
+    {
+        a_ -= 3.1414 * 2;
+    }
+    else if (a_ < 0)
+    {
+        a_ += 3.1414 * 2;
+    }
+    int endy = mouth_.d_ * sin(a_) + cntr_.y();
+    int endx = mouth_.d_ * cos(a_) + cntr_.x();
+    mouth_(endx, endy);
+}
+
+void Tower::draw()
+{
+    surface_->put_circle(cntr_, r_, BLUE);
+    target_.draw();
+    mouth_.draw();
+}
+
+void Tower::target(Ball * ball)
+{
+    target_(ball->x(), ball->y());
+    std::cout << target_.m() << std::endl;
+    vec2i dir(1, 1);
+    if (ball->x() < target_.x0())
+    {
+        dir.set_y(-1);
+        dir.set_x(-1);
+    }
+    target_ = Line(target_.begin(), target_.m(), mouth_.d(), dir);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 Tower::Tower(int x, int y, int r)
     : cntrx(x), cntry(y),
       endx(x + r), endy(y), a_(0), da_(-0.05),
@@ -109,3 +236,4 @@ void Tower::draw()
     surface_->put_circle(cntrx, cntry, r_ - 10, rand() % 256, rand() % 256 , rand() % 256);
     surface_->put_unfilled_circle(cntrx, cntry, r_ - 10, rand() % 256, rand() % 256 , rand() % 256);
 }
+*/

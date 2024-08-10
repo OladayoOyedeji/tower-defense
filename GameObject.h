@@ -11,6 +11,11 @@ class Ball
 public:
     Ball()
     {}
+    
+    Ball(int x, int y, int r)
+        : x_(x), y_(y), radius_(r), color(WHITE)
+    {}
+    
     Ball(int r)
         : radius_(r), dx(rand() % 5 + 1),
           dy(rand() % 5 + 1), x_(path_->startx), y_(path_->starty),
@@ -39,6 +44,12 @@ public:
         return radius_;
     }
 
+    void x_y(const int x, const int y)
+    {
+        x_ = x;
+        y_ = y;
+    }
+    
     bool collide(const Ball * ball) const;
 
     void run();

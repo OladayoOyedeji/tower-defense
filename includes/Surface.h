@@ -10,6 +10,7 @@
 #include "TextSurface.h"
 #include "Color.h"
 #include "Image.h"
+#include "vec2.h"
 
 #include "SDL_gfxPrimitives.h"
 
@@ -63,6 +64,23 @@ public:
 	void	draw_circle( int x, int y, int r, Uint32 pixel );
 	void	draw_circle( int x, int y, int r, const Color & );
 	void	draw_circle( int x, int y, int r, int, int, int );
+    
+    void	put_circle( vec2i & p, int r, int r_, int b_, int g_)
+    {
+        put_circle(p.x(), p.y(), r, r_, b_, g_);
+    }
+    void	put_circle( vec2i & p, int r, const Color & color)
+    {
+        put_circle(p.x(), p.y(), r, color);
+    }
+    void	draw_circle( vec2i & p, int r, int r_, int b_, int g_)
+    {
+        put_circle(p.x(), p.y(), r, r_, b_, g_);
+    }
+    void	draw_circle( vec2i & p, int r, const Color & color)
+    {
+        put_circle(p.x(), p.y(), r, color);
+    }
 
     void	put_unfilled_circle(int, int, int, Uint32);
     void    put_unfilled_circle(int, int, int, const Color &);
@@ -73,6 +91,15 @@ public:
 	void	put_line( int x0, int y0, int x1, int y1, Uint32 );
 	void	put_line( int x0, int y0, int x1, int y1, const Color & );
 	void	put_line( int x0, int y0, int x1, int y1, int, int, int );
+    void    put_line( vec2i & p0, vec2i & p1, int r, int b, int g )
+        {
+            put_line(p0.x(), p0.y(), p1.x(), p1.y(), r, b, g);
+        }
+
+    void    put_line( vec2i & p0, vec2i & p1, const Color & color )
+        {
+            put_line(p0.x(), p0.y(), p1.x(), p1.y(), color);
+        }
 	void	draw_line( int x0, int y0, int x1, int y1, const Color & );
 	void	draw_line( int x0, int y0, int x1, int y1, Uint32 );
 	void	draw_line( int x0, int y0, int x1, int y1, int, int, int );

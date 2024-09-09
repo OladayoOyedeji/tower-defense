@@ -17,3 +17,11 @@
 #include "Line.h"
 #include "Path.h"
 #include "Tower.h"
+
+inline
+bool in_ob(Mouse & mouse, Tower & ball)
+{
+    int r = sqrt((ball.x() - mouse.x()) * (ball.x() - mouse.x()) + (ball.y() - mouse.y()) * (ball.y() - mouse.y()));
+    return (r < ball.rad());
+
+}

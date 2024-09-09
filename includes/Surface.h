@@ -85,6 +85,14 @@ public:
     void	put_unfilled_circle(int, int, int, Uint32);
     void    put_unfilled_circle(int, int, int, const Color &);
 	void	put_unfilled_circle(int, int, int, int, int, int);
+    void	put_unfilled_circle( vec2i & p, int r, int r_, int b_, int g_)
+    {
+        put_unfilled_circle(p.x(), p.y(), r, r_, b_, g_);
+    }
+    void	put_unfilled_circle( vec2i & p, int r, const Color & color)
+    {
+        put_unfilled_circle(p.x(), p.y(), r, color);
+    }
 	//------------------------------------------------------------------------
 	// Line drawing
 	//------------------------------------------------------------------------

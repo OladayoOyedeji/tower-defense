@@ -30,6 +30,12 @@ void Tower::draw()
     surface_->put_circle(cntr_, r_, BLUE);
     target_.draw();
     mouth_.draw();
+    for (std::list< Bullet * >::iterator p = amo.begin();
+         p != amo.end(); ++p)
+    {
+        (*p)->draw();
+    }
+    surface_->put_unfilled_circle(cntr_, range_, WHITE);
 }
 
 void Tower::target(Ball * ball)
@@ -45,8 +51,22 @@ void Tower::target(Ball * ball)
     target_ = Line(target_.begin(), target_.m(), mouth_.d(), dir);
 }
 
+void Tower::shoot()
+{
+    int dir = 1;
+    if (target_.x1() < target_.x0())
+    {
+        dir = -1;
+    }
+    amo.push_back(new Bullet(target_.end(), target_.m(), dir));
+}
 
-
+void Tower::move(int dx, int dy)
+{
+    target_.move(dx, dy);
+    cntr_.move(dx, dy);
+    mouth_.move(dx, dy);
+}
 
 
 

@@ -1,19 +1,4 @@
-#include <iostream>
-#include <cmath>
-#include <vector>
-#include <string>
-#include <fstream>
-#include <ctime>
-#include <cmath>
-#include <cstdlib>
-#include <sstream>
-
-#include "Includes.h"
-#include "Constants.h"
-#include "compgeom.h"
-#include "Event.h"
-#include "Path.h"
-#include "GameObject.h"
+#include "include.h"
 
 int main(int argc, char* argv[])
 {
@@ -22,13 +7,17 @@ int main(int argc, char* argv[])
     Event event;
     Line().set_surface(&surface);
     Ball().set_surface(&surface);
+    Bullet().set_surface(&surface);
+    Tower().set_surface(&surface);
+    Tower t(W / 2, H / 2);
     std::cout << W << std::endl;
-    Path p(W - 50, H - 50, 50, H / 2);
+    Path p(W - 60, H - 50, 50, H / 2);
     Ball().set_path(&p);
     std::list< Ball * > ball;
     p.set_surface(&surface);
     int RATE = 1000 / 60;
     bool s_pressed = false;
+    Mouse mouse;
     
     while(1)
     {
@@ -55,11 +44,25 @@ int main(int argc, char* argv[])
         {
             s_pressed = false;
         }
+        if (mouse.left() && in_ob(mouse, t))
+        {
+            mouse.update(event);
+            t.x_y(mouse.x(), mouse.y());
+        }
+        else
+        {
+            mouse.update(event);
+        }
         //ball->run();
         for (std::list< Ball * >::iterator p = ball.begin();
              p != ball.end(); ++p)
         {
             (*p)->run();
+            int r = sqrt(((*p)->x() - t.x()) * ((*p)->x() - t.x()) + ((*p)->y() - t.y()) * ((*p)->y() - t.y()));
+            if (r < t.range())
+            {
+                t.push((*p));
+            }
             
             if ((*p)->x() - (*p)->rad() >= W)
             {
@@ -72,6 +75,7 @@ int main(int argc, char* argv[])
             }
 
         }
+        t.run();
         surface.lock();
         surface.fill(BLACK);
         p.draw();
@@ -80,6 +84,7 @@ int main(int argc, char* argv[])
         {
             (*p)->draw();
         }
+        t.draw();
         //ball->draw();
         surface.unlock();
         

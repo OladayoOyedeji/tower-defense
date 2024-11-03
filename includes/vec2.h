@@ -41,7 +41,11 @@ public:
     {
         y_ = y;
     }
-
+    void set_xy(const T & x, const T & t)
+    {
+        x_ = x;
+        y_ = y;
+    }
     void move(T dx, T dy)
     {
         x_ += dx;
@@ -132,6 +136,12 @@ public:
     double len() const
     {
         return sqrt((x_ * x_) + (y_ * y_));
+    }
+    void unit() const
+    {
+        double len_ = len();
+        x_ /= len;
+        y_ /= len;
     }
   private:
     T x_, y_;

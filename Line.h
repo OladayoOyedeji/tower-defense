@@ -58,7 +58,14 @@ public:
     {
         return d_;
     }
-
+    int dx() const
+    {
+        return end_.x() - begin_.x();
+    }
+    int dy() const
+    {
+        return end_.y() - begin_.y();
+    }
     Line & operator=(const Line & line);
 
     vec2i begin() const
@@ -83,6 +90,11 @@ public:
     Surface * surface()
     {
         return surface_;
+    }
+    bool whithin(const vec2i & p)
+    {
+        return (p.x() >= begin_.x() && p.x() <= end_.x()
+                && p.y() >= begin_.y() && p.y() <= end_.y()
     }
     static void set_surface(Surface * surface);
     

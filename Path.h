@@ -17,6 +17,14 @@ public:
     void clear();
     void generate_path();
     void draw();
+    std::list<Line *>::iterator begin()
+    {
+        return road_.begin();
+    }
+    std::list<Line *>::iterator end()
+    {
+        return road_.end();
+    }
     static void set_surface(Surface * surface);
 //private:
     std::list< Line * > road_;

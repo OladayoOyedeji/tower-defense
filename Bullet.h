@@ -3,33 +3,33 @@
 
 #include "GameObject.h"
 
-class Bullet
+class Bullet: public GameObject
 {
 public:
-    Bullet();
-    Bullet(int, int, double, int);
-    Bullet(const vec2i &, double, int);
-    void move();
-    void run();
-    void draw();
+    Bullet(const Line & target)
+        : GameObject(target.begin(), 5, target.grad(), 3, RED),
+          pointd_(target.x0(), target.y0())
+    {}
+    virtual void move()
+    {
+        pointd_.move(dir_.x(), dir_.y());
+        pos_.set_x(pointd_.x());
+        pos_.set_y(pointd_.y());
+    }
+    virtual void run()
+    {
+        move();
+    }
     int x()
     {
-        return point_.x();
+        return pos_.x();
     }
     int y()
     {
-        return point_.y();
+        return pos_.y();
     }
-    static void set_surface(Surface * surface);
 private:
-    vec2i point_;
     vec2d pointd_;
-    double dx_, dy_;
-    int vel_;
-    int r_;
-    int dir_;
-    double m_;
-    static Surface * surface_;
 };
 
 #endif

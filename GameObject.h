@@ -9,15 +9,28 @@
 class GameObject
 {
 public:
+    GameObject()
+    {}
     GameObject(int, int, int, double, double,
                double, const Color&);
     GameObject(const vec2i&, int, const vec2d&,
                double, const Color&);
-    virtual void move();
-    virtual void run() = 0;
-    void position();
+    virtual void move()
+    {
+        pos_ += dir_;
+    }
+    virtual void draw()
+    {surface_->put_circle(pos_, radius_, color_);}
+    virtual void run()
+    {
+        move();
+    }
+    vec2i pos() const
+    {
+        return pos_;
+    }
     void radius();
-//private:
+    static void set_surface(Surface *);
     vec2i pos_;
     vec2d dir_;
     int radius_;
@@ -26,37 +39,27 @@ public:
     static Surface * surface_;
 };
 
-class Ball : public GameObject
+class Ball: public GameObject
 {
 public:
-    Ball()
-    {}
-
     Ball(Path * path, int r)
-        : path_(path), GameObject(path->startx, path->starty, r, (*p)->dx(), (*p)->dy(), 2,  RED)
-    {
-        
-    }
+        : path_(path), GameObject(path->start(), r,
+                                  path->vector(), 2.0,
+                                  RED), p(path_->begin())
+    {}
     
-    Ball(int x, int y, int r, double dx = 0, double dy = 0)
+    Ball(int x, int y, int r,
+         double dx = 0, double dy = 0)
         : GameObject(x, y, r, dx, dy, 1,  RED)
     {}
     
-    // Ball(int r)
-    //     : radius_(r), dx(rand() % 5 + 1),
-    //       dy(rand() % 5 + 1), x_(path_->startx), y_(path_->starty),
-    //       r_(0), b_(200), g_(0), i(0), p(path_->road_.begin()),
-    //       color(RED)
-    // {}
-    void draw()
+    virtual void draw()
     {
-        surface_->put_circle(x_, y_, radius_, color);
-        surface_->put_unfilled_circle(x_, y_, radius_, rand() % 255, rand() % 255, rand() % 255);
+        surface_->put_circle(pos_, radius_, color_);
+        surface_->put_unfilled_circle(pos_, radius_,
+                                      rand() % 255, rand() % 255,
+                                      rand() % 255);
     }
-    // void move()
-    // {
-    //     x_ += dx; y_ += dy;
-    // }
     int x() const
     {
         return pos_.x();
@@ -72,21 +75,14 @@ public:
 
     void x_y(const int x, const int y)
     {
-        pos_.set_xy(x, y);
+        pos_.set_x(x);
+        pos_.set_y(y);
     }
     
-    //bool collide(const Ball * ball) const;
-
-    void run();
-    static void set_surface(Surface *);
-    static void set_path(Path *);
-//private:
-    // int radius_, x_, y_, r_, b_, g_, dx, dy;
-    // Color color;
+    virtual void run();
+    
     Path * path_;
-    // static Surface * surface_;
-    // int i;
-    // std::list< Line * >::iterator p;
+    std::list< Line * >::iterator p;
 };
 
 inline

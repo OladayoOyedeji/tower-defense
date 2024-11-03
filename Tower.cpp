@@ -40,25 +40,20 @@ void Tower::draw()
 
 void Tower::target(Ball * ball)
 {
-    target_(ball->x(), ball->y());
-    std::cout << target_.m() << std::endl;
-    vec2i dir(1, 1);
-    if (ball->x() < target_.x0())
-    {
-        dir.set_y(-1);
-        dir.set_x(-1);
-    }
-    target_ = Line(target_.begin(), target_.m(), mouth_.d(), dir);
+    //target_(ball->pos_);
+    //std::cout << target_.m() << std::endl;
+    // vec2i dir(1, 1);
+    // if (ball->x() < target_.x0())
+    // {
+    //     dir.set_y(-1);
+    //     dir.set_x(-1);
+    // }
+    target_ = Line(target_.begin(), ball->pos());
 }
 
 void Tower::shoot()
 {
-    int dir = 1;
-    if (target_.x1() < target_.x0())
-    {
-        dir = -1;
-    }
-    amo.push_back(new Bullet(target_.end(), target_.m(), dir));
+    amo.push_back(new Bullet(target_));
 }
 
 void Tower::move(int dx, int dy)

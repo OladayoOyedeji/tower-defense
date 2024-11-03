@@ -41,7 +41,7 @@ public:
     {
         y_ = y;
     }
-    void set_xy(const T & x, const T & t)
+    void set_xy(const T & x, const T & y)
     {
         x_ = x;
         y_ = y;
@@ -137,11 +137,11 @@ public:
     {
         return sqrt((x_ * x_) + (y_ * y_));
     }
-    void unit() const
+    void unit()
     {
         double len_ = len();
-        x_ /= len;
-        y_ /= len;
+        x_ /= len_;
+        y_ /= len_;
     }
   private:
     T x_, y_;
@@ -150,6 +150,13 @@ public:
 typedef vec2< int > vec2i;
 typedef vec2< float > vec2f;
 typedef vec2< double > vec2d;
+
+inline
+void operator+=(vec2i & vec, const vec2d & v)
+{
+    vec.set_x(v.x() + vec.x());
+    vec.set_y(v.y() + vec.y());
+}
 
 template < typename T >
 vec2< T > operator*(T i, const vec2< T > & v)

@@ -23,11 +23,14 @@ public:
         {
             int x1_ = begin_.x() + dir.y() * d_ * cos(atan(m_));
             int y1_ = begin_.y() + dir.x() * d_ * sin(atan(m_));
-            std::cout << "y direction: " << dir.y() << ' '
-                      << "x direction: " << dir.x() << '\n';
+            // std::cout << "y direction: " << dir.y() << ' '
+            //           << "x direction: " << dir.x() << '\n';
             end_ = vec2i(x1_, y1_);
         }
     }
+    Line(const vec2i & point1, const vec2i & point2)
+        : begin_(point1), end_(point2)
+    {}
     Line(int x, int y)
         : begin_(x, y), end_(x, y), m_(0), d_(0)
     {}
@@ -66,6 +69,10 @@ public:
     {
         return end_.y() - begin_.y();
     }
+    vec2d grad() const
+    {
+        return vec2d(dx(), dy());
+    }
     Line & operator=(const Line & line);
 
     vec2i begin() const
@@ -85,6 +92,10 @@ public:
         m_ = double(end_.y() - begin_.y()) / double(end_.x() - begin_.x());
         d_ = sqrt((end_.y() - begin_.y()) * (end_.y() - begin_.y()) + (end_.x() - begin_.x()) * (end_.x() - begin_.x()));
     }
+    void operator()(const vec2i & p)
+    {
+        end_ = p;
+    }
     void move(int, int);
     void draw();
     Surface * surface()
@@ -93,11 +104,14 @@ public:
     }
     bool whithin(const vec2i & p)
     {
+        //if ()
         return (p.x() >= begin_.x() && p.x() <= end_.x()
-                && p.y() >= begin_.y() && p.y() <= end_.y()
+                && p.y() >= begin_.y() && p.y() <= end_.y()) ||
+            (p.x() <= begin_.x() && p.x() >= end_.x()
+                && p.y() <= begin_.y() && p.y() >= end_.y());
     }
     static void set_surface(Surface * surface);
-    
+//private:
     vec2i begin_;
     vec2i end_;
     double m_;

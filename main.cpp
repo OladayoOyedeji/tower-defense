@@ -5,16 +5,16 @@ int main(int argc, char* argv[])
     srand((unsigned int) time(NULL));
     Surface surface(W, H);
     Event event;
-    Line().set_surface(&surface);
-    Ball().set_surface(&surface);
-    Bullet().set_surface(&surface);
+    GameObject().set_surface(&surface);
+    Path().set_surface(&surface);
     Tower().set_surface(&surface);
+    
     Tower t(W / 2, H / 2);
     std::cout << W << std::endl;
     Path p(W - 60, H - 50, 50, H / 2);
-    Ball().set_path(&p);
+    
     std::list< Ball * > ball;
-    p.set_surface(&surface);
+    // p.set_surface(&surface);
     int RATE = 1000 / 60;
     bool s_pressed = false;
     Mouse mouse;
@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
 
         if (!s_pressed && keypressed[SPACE])
         {
-            ball.push_back(new Ball(rand() % 30 + 10));
+            ball.push_back(new Ball(&p, rand() % 30 + 10));
             s_pressed = true;
         }
         if (!keypressed[SPACE])

@@ -19,7 +19,6 @@ void Path::clear()
         p--;
         road_.pop_back();
     }
-    //std::cout << road_.size() << std::endl;
 }
 
 void Path::generate_path()
@@ -37,10 +36,6 @@ void Path::generate_path()
             if ((startx + w) - x > 20)
             {
                 x1 = rand() % (w - (x + 25) + 1  ) + x + 25;
-                //std::cout << x1 << std::endl;
-                // 10 + x <----> W
-                // 
-                // rand() %  + 10 + x
                 
             }
             else
@@ -85,5 +80,6 @@ void Path::draw()
 
 void Path::set_surface(Surface * surface)
 {
+    Line().set_surface(surface);
     surface_ = surface;
 }

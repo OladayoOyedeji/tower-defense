@@ -13,7 +13,7 @@ public:
     Path(const int w_, const int h_, const int startx_, const int starty_)
         : w(w_), h(h_), startx(startx_), starty(starty_)
     {
-        generate_path();
+        //generate_path();
     }
     ~Path();
     void clear();

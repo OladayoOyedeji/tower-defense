@@ -42,11 +42,13 @@ public:
 class Ball: public GameObject
 {
 public:
-    Ball(Path * path, int r)
+    Ball(Path * path, int r, double vel)
         : path_(path), GameObject(path->start(), r,
-                                  path->vector(), 2.0,
+                                  path->vector(), vel,
                                   RED), p(path_->begin())
-    {}
+    {
+        std::cout << pos_ << std::endl;
+    }
     
     Ball(int x, int y, int r,
          double dx = 0, double dy = 0)

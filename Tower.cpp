@@ -38,7 +38,7 @@ void Tower::draw()
     surface_->put_unfilled_circle(cntr_, range_, WHITE);
 }
 
-void Tower::target(Ball * ball)
+Line Tower::target(Ball * ball)
 {
     //target_(ball->pos_);
     //std::cout << target_.m() << std::endl;
@@ -49,6 +49,7 @@ void Tower::target(Ball * ball)
     //     dir.set_x(-1);
     // }
     target_ = Line(target_.begin(), ball->pos());
+    return target_;
 }
 
 void Tower::shoot()

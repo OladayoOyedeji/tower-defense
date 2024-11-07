@@ -46,7 +46,7 @@ public:
         int dy = y - cntr_.y();
         move(dx, dy);
     }
-    void target(Ball * ball);
+    Line target(Ball * ball);
     void run()
     {
         for (std::list< Bullet * >::iterator p = amo.begin();
@@ -97,6 +97,7 @@ private:
     static Surface * surface_;
     std::list< Bullet * > amo;
     std::list< Ball * > victims_;
+    //std::stack<>
     Ball * ball_;
 };
 

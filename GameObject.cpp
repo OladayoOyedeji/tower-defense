@@ -12,7 +12,7 @@ GameObject::GameObject(int x, int y, int radius,
                        double dx, double dy, double vel,
                        const Color & col)
     : pos_(x, y), radius_(radius), vel_(vel),
-      dir_(dx, dy), color_(col)
+      dir_(dx, dy), color_(col), alive_(true)
 {
     dir_.unit();
     dir_ *= vel;
@@ -21,7 +21,8 @@ GameObject::GameObject(int x, int y, int radius,
 GameObject::GameObject(const vec2i & pos, int radius,
                        const vec2d & dir, double vel,
                        const Color & color)
-    : pos_(pos), radius_(radius), vel_(vel), dir_(dir), color_(color)
+    : pos_(pos), radius_(radius), vel_(vel),
+      dir_(dir), color_(color), alive_(true)
 {
     dir_.unit();
     dir_ *= vel;

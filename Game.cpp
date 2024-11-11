@@ -82,7 +82,9 @@ void Game::draw()
 //     }
 // }
 void Game::collision_detection()
-{}
+{
+    Quadtree(amo_, bloons_);
+}
 // void Game::delay()
 // {}
 

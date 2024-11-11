@@ -36,7 +36,9 @@ public:
     int radius_;
     double vel_;
     Color color_;
+    bool alive_;
     static Surface * surface_;
+    
 };
 
 class Ball: public GameObject

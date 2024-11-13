@@ -1,6 +1,6 @@
 #include "Node.h"
 
-void QuadtreeNode::insert(Bullet * bul)
+void QuadTreeNode::insert(Bullet * bul)
 {
     if (!empty())
     {
@@ -9,8 +9,8 @@ void QuadtreeNode::insert(Bullet * bul)
         
             if (children_[i] != NULL)
             {
-                if (bul->x() < children_[i]->startx_ && ball->x() < children_[i]->endx_
-                    && bul->y() < children_[i]->starty_ && ball->y() < children_[i]->endy_)
+                if (bul->x() < children_[i]->startx_ && bul->x() < children_[i]->endx_
+                    && bul->y() < children_[i]->starty_ && bul->y() < children_[i]->endy_)
                 {
                     children_[i]->amo_.push_back(bul);
                 }
@@ -18,7 +18,7 @@ void QuadtreeNode::insert(Bullet * bul)
         }
     }
 }
-void QuadtreeNode::insert(Ball * bul)
+void QuadTreeNode::insert(Ball * bul)
 {
     if (!empty())
     {
@@ -27,8 +27,8 @@ void QuadtreeNode::insert(Ball * bul)
         
             if (children_[i] != NULL)
             {
-                if (bul->x() < children_[i]->startx_ && ball->x() < children_[i]->endx_
-                    && bul->y() < children_[i]->starty_ && ball->y() < children_[i]->endy_)
+                if (bul->x() < children_[i]->startx_ && bul->x() < children_[i]->endx_
+                    && bul->y() < children_[i]->starty_ && bul->y() < children_[i]->endy_)
                 {
                     children_[i]->bloons_.push_back(bul);
                 }
@@ -36,7 +36,7 @@ void QuadtreeNode::insert(Ball * bul)
         }
     }
 }
-bool empty()
+bool QuadTreeNode::empty()
 {
     for (int i = 0; i < children_.size(); ++i)
     {
@@ -47,7 +47,7 @@ bool empty()
     }
     return true;
 }
-void QuadtreeNode::split()
+void QuadTreeNode::split()
 {
     if (empty())
     {
@@ -56,10 +56,10 @@ void QuadtreeNode::split()
             // start
             int midx = (endx_ - startx_) / 2 + startx_;
             int midy = (endy_ - starty_) / 2 + starty_;
-            children_[0] = (new QuadTreeNode(startx_, starty_, midx_, midy_));
-            children_[1] = (new QuadTreeNode(midx_, starty_, endx_, midy_));
-            children_[2] = (new QuadTreeNode(startx_, midy_, midx_, endy_));
-            children_[3] = (new QuadTreeNode(midx_, midy_, endy_, endx_));
+            children_[0] = (new QuadTreeNode(startx_, starty_, midx, midy));
+            children_[1] = (new QuadTreeNode(midx, starty_, endx_, midy));
+            children_[2] = (new QuadTreeNode(startx_, midy, midx, endy_));
+            children_[3] = (new QuadTreeNode(midx, midy, endy_, endx_));
         }
         for (std::list<Bullet *>::iterator p = amo_.begin();
              p != amo_.end(); ++p)
@@ -67,11 +67,12 @@ void QuadtreeNode::split()
             insert(*p);
         }
     
-        for (std::list<Ball *>::iterator p = amo_.begin();
-             p != amo_.end(); ++p)
+        for (std::list<Ball *>::iterator p = bloons_.begin();
+             p != bloons_.end(); ++p)
         {
             insert(*p);
         }
     }
 }
-void QuadtreeNode::collision();
+void QuadTreeNode::collision()
+{}

@@ -20,10 +20,14 @@ public:
         pos_ += dir_;
     }
     virtual void draw()
-    {surface_->put_circle(pos_, radius_, color_);}
+    {
+        if (alive_)
+            surface_->put_circle(pos_, radius_, color_);
+    }
     virtual void run()
     {
-        move();
+        if (alive_)
+            move();
     }
     vec2i pos() const
     {
@@ -46,10 +50,10 @@ class Ball: public GameObject
 public:
     Ball(Path * path, int r, double vel)
         : path_(path), GameObject(path->start(), r,
-                                  path->vector(), vel,
+                                  path->vector(), vel * double(r)/30 + 1,
                                   RED), p(path_->begin())
     {
-        std::cout << pos_ << std::endl;
+        
     }
     
     Ball(int x, int y, int r,
@@ -59,10 +63,13 @@ public:
     
     virtual void draw()
     {
-        surface_->put_circle(pos_, radius_, color_);
-        surface_->put_unfilled_circle(pos_, radius_,
-                                      rand() % 255, rand() % 255,
-                                      rand() % 255);
+        if (alive_)
+        {
+            surface_->put_circle(pos_, radius_, color_);
+            surface_->put_unfilled_circle(pos_, radius_,
+                                          rand() % 255, rand() % 255,
+                                          rand() % 255);
+        }
     }
     int x() const
     {

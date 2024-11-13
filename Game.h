@@ -5,7 +5,7 @@
 #include <stack>
 
 const int num_tower = 3;
-const int num_bloons = 50;
+const int num_bloons = 100;
 const int fps = 60;
 
 class Game
@@ -14,7 +14,7 @@ public:
     Game(Surface * surface)
         : surface_(surface), tower_(num_tower),
           path_(W, H, 0, H/2), count_(0),
-          RATE_(1000 / 60)
+          RATE_(1000 / 60), bloons_move_(false)
     {
         path_.set_surface(surface_);
         path_.generate_path();
@@ -41,11 +41,14 @@ public:
         }
     }
     void mouse_move();
+    void game_input(bool &);
     void bloons_move();
     void run();
     void draw();
     void shoot();
     void collision_detection();
+    bool bloons_move_;
+    
     //void delay();
 private:
     Surface * surface_;

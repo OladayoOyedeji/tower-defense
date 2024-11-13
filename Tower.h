@@ -17,11 +17,13 @@ public:
           r_(10), mouth_(cntrx, cntry, double(0), double(r_ + 10)),
           a_(0), da_(-0.05), range_(100), timer_(0), ball_(NULL)
     {}
+    
     void rotate();
     void draw();
     void push(Ball * ball)
     {
-        victims_.push_front(ball);
+        if (in_range(ball))
+            victims_.push_back(ball);
     }
     void move(int , int);
     int x()
@@ -63,14 +65,26 @@ public:
                 {break;}
             }
         }
-        if (timer_ % 50 == 0 && victims_.size() != 0)
+        
+        if (!(victims_.empty()))
+        {
+            std::list< Ball * >::iterator p = victims_.begin();
+            if (in_range(*p) && (*p)->alive_)
+                target(*(victims_.begin()));
+            else
+                victims_.erase(p);    
+        }
+        if (timer_ % 100 == 0 && victims_.size() != 0)
         {
             shoot();
         }
-        if (victims_.begin() != victims_.end())
-            target(*(victims_.begin()));
-        victims_.clear();
         ++timer_;
+    }
+    bool in_range(const Ball * ball)
+    {
+        int r = ball->pos().dist(cntr_);
+        
+        return r < range_;
     }
     void anticlock()
     {
@@ -97,6 +111,7 @@ private:
     static Surface * surface_;
     std::list< Bullet * > amo;
     std::list< Ball * > victims_;
+    std::unordered_map<Ball *, char> v_;
     //std::stack<>
     Ball * ball_;
 };

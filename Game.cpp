@@ -5,7 +5,6 @@ void Game::mouse_move()
     static bool click = false;
     if (!(mouse_mov_.empty()))
     {
-        std::cout << "hello" << std::endl;
         Tower * t = mouse_mov_.top();
         if (mouse_.left() && in_ob(mouse_, *t))
         {
@@ -24,36 +23,61 @@ void Game::mouse_move()
 }
 void Game::bloons_move()
 {
-    static int nums = 0;
-    if (count_ % 60 == 0 && nums != num_bloons)
+    if (bloons_move_)
     {
-        nums++;
-        bloons_.push_back(new Ball(&path_, rand() % 30 + 10, rand() / RAND_MAX + 2));
-    }
-    count_++;
-    for (std::list< Ball * >::iterator p = bloons_.begin();
-         p != bloons_.end(); ++p)
-    {
-        (*p)->run();
-        // int r = sqrt(((*p)->x() - t.x()) * ((*p)->x() - t.x()) + ((*p)->y() - t.y()) * ((*p)->y() - t.y()));
-        // if (r < t.range())
-        // {
-        //     //t.push((*p));
-        //     shoot((*p));
-        // }
-            
-        if ((*p)->x() - (*p)->rad() >= W)
+        static int nums = 0;
+        if (count_ % 30 == 0 && nums != num_bloons)
         {
-            std::list< Ball * >::iterator q = p;
-            ++p;
-            delete (*q);
-            bloons_.erase(q);
-            if (p == bloons_.end())
-            {break;}
+            nums++;
+            bloons_.push_back(new Ball(&path_, rand() % 30 + 10, rand() / RAND_MAX + 2));
         }
+        count_++;
+        for (std::list< Ball * >::iterator p = bloons_.begin();
+             p != bloons_.end(); ++p)
+        {
+            (*p)->run();
+            for (int i = 0; i < tower_.size(); ++i)
+            {
+                tower_[i]->push((*p));
+                tower_[i]->run();
+            }
+            // int r = sqrt(((*p)->x() - t.x()) * ((*p)->x() - t.x()) + ((*p)->y() - t.y()) * ((*p)->y() - t.y()));
+            // if (r < t.range())
+            // {
+            //     //t.push((*p));
+            //     shoot((*p));
+            // }
+            
+            if ((*p)->x() - (*p)->rad() >= W || (*p)->alive_ == false)
+            {
+                std::list< Ball * >::iterator q = p;
+                ++p;
+                delete (*q);
+                bloons_.erase(q);
+                if (p == bloons_.end())
+                {break;}
+            }
 
+        }
     }
 }
+void Game::game_input(bool & s_pressed)
+{
+    if (!bloons_move_)
+    {
+        KeyPressed keypressed = get_keypressed();
+        if (!s_pressed && keypressed[SPACE])
+        {
+            bloons_move_ = true;
+            s_pressed = true;
+        }
+        if (!keypressed[SPACE])
+        {
+            s_pressed = false;
+        }
+    }
+}
+
 void Game::draw()
 {
     surface_->lock();
@@ -83,7 +107,7 @@ void Game::draw()
 // }
 void Game::collision_detection()
 {
-    Quadtree(amo_, bloons_);
+    //Quadtree(amo_, bloons_);
 }
 // void Game::delay()
 // {}
@@ -96,6 +120,7 @@ void Game::run()
         if (event_.poll() && event_.type() == QUIT) break;
         int start = getTicks();
         mouse_move();
+        game_input(s_pressed);
         bloons_move();
         //shoot();
         collision_detection();

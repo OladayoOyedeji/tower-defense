@@ -50,4 +50,8 @@ void Ball::run()
             move();
         }
     }
+    else
+    {
+        alive_ = false;
+    }
 }

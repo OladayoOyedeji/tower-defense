@@ -60,7 +60,11 @@ public:
         }
         return (i > 0 ? y_ : x_);
     }
-    
+    double dist(const vec2<T> & v)
+    {
+        return sqrt((v.x_ - x_) * (v.x_ - x_)
+                    + (v.y_ - y_) * (v.y_ - y_));
+    }
     T & operator[](int i)
     {
         if (i == 0)

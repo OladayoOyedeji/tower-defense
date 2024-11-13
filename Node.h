@@ -1,6 +1,6 @@
-#ifndef QUADTREENODE_H
-#define QUADTREENODE_H
-
+#ifndef NODE_H
+#define NODE_H
+#include "include.h"
 class QuadTreeNode
 {
 public:
@@ -18,6 +18,7 @@ public:
     void insert(Ball * bul);
     void split();
     void collision();
+    bool empty();
         
 private:
     std::list< Bullet * > amo_;

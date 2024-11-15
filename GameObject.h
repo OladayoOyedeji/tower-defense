@@ -15,6 +15,8 @@ public:
                double, const Color&);
     GameObject(const vec2i&, int, const vec2d&,
                double, const Color&);
+    // towers constructor
+    GameObject(const vec2i&, int)
     virtual void move()
     {
         pos_ += dir_;

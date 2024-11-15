@@ -7,24 +7,28 @@
 #include "Bullet.h"
 #include <cmath>
 
-class Tower
+const int TOWER_RADIUS = 10;
+const int TOWER_RANGE = 100;
+
+/*the blue towers priority is the balls faster
+ the reds priority is is the slower balls
+ the whites priority is the bigger balls
+ and the grey priority is the slower balls
+
+ so i need to create a priority queue of all theses
+ condition*/
+
+class Tower: public GameObject
 {
 public:
     Tower()
     {}
-    Tower(int cntrx, int cntry)
-        : cntr_(cntrx, cntry), target_(cntrx, cntry),
-          r_(10), mouth_(cntrx, cntry, double(0), double(r_ + 10)),
-          a_(0), da_(-0.05), range_(100), timer_(0), ball_(NULL)
-    {}
+    Tower(const vec2i&, const Color&);
+    Tower(int cntrx, int cntry);
     
     void rotate();
     void draw();
     void push(Ball * ball)
-    {
-        if (in_range(ball))
-            victims_.push_back(ball);
-    }
     void move(int , int);
     int x()
     {
@@ -42,44 +46,9 @@ public:
     {
         return range_;
     }
-    void x_y(const int x, const int y)
-    {
-        int dx = x - cntr_.x();
-        int dy = y - cntr_.y();
-        move(dx, dy);
-    }
+    void x_y(const int x, const int y);
     Line target(Ball * ball);
-    void run()
-    {
-        for (std::list< Bullet * >::iterator p = amo.begin();
-             p != amo.end(); ++p)
-        {
-            (*p)->run();
-            if ((*p)->x() < 0 || (*p)->x() >= W || (*p)->y() >= H || (*p)->x() < 0)
-            {
-                std::list< Bullet * >::iterator q = p;
-                ++p;
-                delete (*q);
-                amo.erase(q);
-                if (p == amo.end())
-                {break;}
-            }
-        }
-        
-        if (!(victims_.empty()))
-        {
-            std::list< Ball * >::iterator p = victims_.begin();
-            if (in_range(*p) && (*p)->alive_)
-                target(*(victims_.begin()));
-            else
-                victims_.erase(p);    
-        }
-        if (timer_ % 100 == 0 && victims_.size() != 0)
-        {
-            shoot();
-        }
-        ++timer_;
-    }
+    void run();
     bool in_range(const Ball * ball)
     {
         int r = ball->pos().dist(cntr_);
@@ -111,9 +80,40 @@ private:
     static Surface * surface_;
     std::list< Bullet * > amo;
     std::list< Ball * > victims_;
-    std::unordered_map<Ball *, char> v_;
     //std::stack<>
     Ball * ball_;
+};
+
+class B_tower : public Tower
+{
+public:
+    B_tower(const vec2i & v)
+        : Tower(v, BLUE)
+    {}
+};
+
+class R_tower : public Tower
+{
+public:
+    R_tower(const vec2i & v)
+        : Tower(v, RED)
+    {}
+};
+
+class W_tower : public Tower
+{
+public:
+    W_tower(const vec2i & v)
+        : Tower(v, WHITE)
+    {}
+};
+
+class G_tower : public Tower
+{
+public:
+    G_tower(const vec2i & v)
+        : Tower(v, GREY)
+    {}
 };
 
 #endif

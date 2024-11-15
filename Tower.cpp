@@ -7,8 +7,55 @@ void Tower::set_surface(Surface * surface)
     surface_ = surface;
 }
 
+Tower::Tower(int cntrx, int cntry)
+    : cntr_(cntrx, cntry), target_(cntrx, cntry),
+      r_(10), mouth_(cntrx, cntry, double(0), double(r_ + 10)),
+      a_(0), da_(-0.05), range_(100), timer_(0), ball_(NULL)
+{}
 
+void Tower::push(Ball * ball)
+{
+    if (in_range(ball))
+        victims_.push_back(ball);
+}
 
+void Tower::x_y(const int x, const int y)
+{
+    int dx = x - cntr_.x();
+    int dy = y - cntr_.y();
+    move(dx, dy);
+}
+void Tower::run()
+{
+    for (std::list< Bullet * >::iterator p = amo.begin();
+         p != amo.end(); ++p)
+    {
+        (*p)->run();
+        if ((*p)->x() < 0 || (*p)->x() >= W || (*p)->y() >= H || (*p)->x() < 0)
+        {
+            std::list< Bullet * >::iterator q = p;
+            ++p;
+            delete (*q);
+            amo.erase(q);
+            if (p == amo.end())
+            {break;}
+        }
+    }
+        
+    if (!(victims_.empty()))
+    {
+        std::list< Ball * >::iterator p = victims_.begin();
+        if (in_range(*p) && (*p)->alive_)
+            target(*(victims_.begin()));
+        else
+            victims_.erase(p);    
+    }
+    if (timer_ % 100 == 0 && victims_.size() != 0)
+    {
+        shoot();
+    }
+    ++timer_;
+}
 void Tower::rotate()
 {
     a_ += da_;

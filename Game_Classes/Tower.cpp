@@ -75,11 +75,6 @@ void Tower::draw()
     surface_->put_circle(pos_, radius_, color_);
     target_.draw();
     mouth_.draw();
-    // for (std::list< Bullet * >::iterator p = amo.begin();
-    //      p != amo.end(); ++p)
-    // {
-    //     (*p)->draw();
-    // }
     surface_->put_unfilled_circle(pos_, range_, color_);
 }
 

@@ -17,6 +17,7 @@
 #include "Line.h"
 #include "Path.h"
 #include "Tower.h"
+#include "QuadTree.h"
 
 inline
 bool in_ob(Mouse & mouse, Tower & ball)

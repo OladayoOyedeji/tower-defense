@@ -35,20 +35,6 @@ void Game::bloons_move()
         for (std::list< Ball * >::iterator p = bloons_.begin();
              p != bloons_.end(); ++p)
         {
-            (*p)->run();
-            for (int i = 0; i < tower_.size(); ++i)
-            {
-                tower_[i]->push((*p));
-                tower_[i]->run();
-                int r = sqrt(((*p)->x() - tower_[i]->x()) * ((*p)->x() - tower_[i]->x()) + ((*p)->y() - tower_[i]->y()) * ((*p)->y() - tower_[i]->y()));
-                if (r < tower_[i]->range())
-                {
-                    //tower_[i]->push((*p));
-                    shoot((*p), tower_[i]);
-                }
-            }
-            
-            
             if ((*p)->x() - (*p)->rad() >= W || (*p)->alive_ == false)
             {
                 std::list< Ball * >::iterator q = p;
@@ -58,7 +44,21 @@ void Game::bloons_move()
                 if (p == bloons_.end())
                 {break;}
             }
-
+            else
+            {
+                (*p)->run();
+                for (int i = 0; i < tower_.size(); ++i)
+                {
+                    tower_[i]->push((*p));
+                    tower_[i]->run();
+                    int r = sqrt(((*p)->x() - tower_[i]->x()) * ((*p)->x() - tower_[i]->x()) + ((*p)->y() - tower_[i]->y()) * ((*p)->y() - tower_[i]->y()));
+                    if (r < tower_[i]->range())
+                    {
+                        //tower_[i]->push((*p));
+                        shoot((*p), tower_[i]);
+                    }
+                }
+            }
         }
     }
 }
@@ -108,13 +108,13 @@ void Game::shoot(Ball * ball, Tower * tower)
 {
     if (a_timer_ % 101 == 0)
     {
-        amo_.push_back(new Bullet(tower->target()));
+        amo_.push_back(new Bullet(tower->target(ball)));
     }
     ++a_timer_;
 }
 void Game::collision_detection()
 {
-    //Quadtree(amo_, bloons_);
+    QuadTree(0, 0, W, H, amo_, bloons_);
 }
 // void Game::delay()
 // {}
@@ -133,7 +133,17 @@ void Game::run()
         for (std::list< Bullet * >::iterator p = amo_.begin();
              p != amo_.end(); ++p)
         {
-            (*p)->run();
+            if ((*p)->x() - (*p)->radius() >= W || (*p)->alive_ == false)
+            {
+                std::list< Bullet * >::iterator q = p;
+                ++p;
+                delete (*q);
+                amo_.erase(q);
+                if (p == amo_.end())
+                {break;}
+            }
+            else
+                (*p)->run();
         }
         collision_detection();
         draw();

@@ -7,7 +7,7 @@ class Bullet: public GameObject
 {
 public:
     Bullet(const Line & target)
-        : GameObject(target.begin(), 5, target.grad(), 10.5, RED),
+        : GameObject(target.begin(), 2, target.grad(), 10.5, RED),
           pointd_(target.x0(), target.y0())
     {}
     virtual void move()

@@ -1,13 +1,19 @@
 #ifndef NODE_H
 #define NODE_H
-#include "include.h"
+
+#include <iostream>
+#include <list>
+#include <vector>
+#include "Bullet.h"
+
+
 class QuadTreeNode
 {
 public:
     QuadTreeNode(int startx, int starty, int endx, int endy,
                  std::list< Bullet * > amo, std::list< Ball * > bloons)
         : startx_(startx), starty_(starty), children_(4),
-          endx_(endx), endy_(endy), parent_(parent), amo_(amo),
+          endx_(endx), endy_(endy), parent_(NULL), amo_(amo),
           bloons_(bloons)
     {}
     QuadTreeNode(int startx, int starty, int endx, int endy,
@@ -22,9 +28,14 @@ public:
     }
     void insert(Bullet * bul);
     void insert(Ball * bul);
+    
+    void child_insert(Bullet * bul);
+    void child_insert(Ball * bul);
+    
     void split();
     void collision();
     bool empty();
+    void clear_children();
         
 private:
     std::list< Bullet * > amo_;

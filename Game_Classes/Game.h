@@ -8,7 +8,7 @@ const int num_R_tower = 3;
 const int num_B_tower = 3;
 const int num_W_tower = 3;
 const int num_G_tower = 3;
-const int num_bloons = 1000;
+const int num_bloons = 300;
 const int fps = 60;
 
 class Game
@@ -16,7 +16,7 @@ class Game
 public:
     Game(Surface * surface)
         : surface_(surface), tower_(num_R_tower + num_B_tower + num_W_tower + num_G_tower),
-          path_(W, H, 0, H/2), count_(0), a_timer_(0),
+          path_(W - 5, H - 5, 0, H/2), count_(0), a_timer_(0),
           RATE_(1000 / 60), bloons_move_(false)
     {
         path_.set_surface(surface_);

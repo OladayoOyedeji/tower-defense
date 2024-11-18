@@ -38,11 +38,22 @@ public:
         if (alive_)
             move();
     }
+    bool alive() const
+    {
+        return alive_;
+    }
+    int radius() const
+    {
+        return radius_;
+    }
+    bool & alive()
+    {
+        return alive_;
+    }
     vec2i pos() const
     {
         return pos_;
     }
-    void radius();
     static void set_surface(Surface *);
     vec2i pos_;
     vec2d dir_;

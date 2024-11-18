@@ -34,7 +34,9 @@ public:
     Line(int x, int y)
         : begin_(x, y), end_(x, y), m_(0), d_(0)
     {}
-        
+    Line(const vec2i & v)
+        : begin_(v), end_(v)
+    {}
     Line(int x0, int y0, int x1, int y1);
     Line(Line & l1, Line & l2);
     int x0() const

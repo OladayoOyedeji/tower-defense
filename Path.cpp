@@ -39,7 +39,7 @@ void Path::generate_path()
                 vec2i end(endx - 1, y);
                 x = end.x(); y = end.y();
                 road_.push_back(new Line(start, end));
-                std::cout << "1" << start << ' ' << end << std::endl;
+                // std::cout << "1" << start << ' ' << end << std::endl;
                 return;
             }
             else
@@ -49,7 +49,7 @@ void Path::generate_path()
                 vec2i end(rand() % (midx - x - 10) + x, y);
                 x = end.x(); y = end.y();
                 road_.push_back(new Line(start, end));
-                std::cout << "2" << start << ' ' << end << std::endl;
+                // std::cout << "2" << start << ' ' << end << std::endl;
                 dir_ = VERTICAL;
             }
         }
@@ -71,7 +71,7 @@ void Path::generate_path()
                 vec2i start(x, y);
                 vec2i end(x, rand() % (endy - y) + 10);
                 road_.push_back(new Line(start, end));
-                std::cout << "4" << start << ' ' << end << std::endl;
+                // std::cout << "4" << start << ' ' << end << std::endl;
                 x = end.x(); y = end.y();
                 dir_ = HORIZONTAL;
             }

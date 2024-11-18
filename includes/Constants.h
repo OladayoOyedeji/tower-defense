@@ -13,8 +13,8 @@
 /* const int W = 640; */
 /* const int H = 180; */
 
-const int W = 840;
-const int H = 380;
+const int W = 1500;
+const int H = 680;
 
 #endif
 

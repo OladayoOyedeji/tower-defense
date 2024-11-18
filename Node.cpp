@@ -75,4 +75,23 @@ void QuadTreeNode::split()
     }
 }
 void QuadTreeNode::collision()
-{}
+{
+    if (empty())
+    {
+        for (std::list<Bullet *>::iterator p = amo_.begin();
+             p != amo_.end(); ++p)
+        {
+            if ((*p)->alive() == true)
+            {
+                for (std::list<Ball *>::iterator q = bloons_.begin();
+                     q != bloons_.end(); ++q)
+                {
+                    if (collide)
+                    {
+                        (*p)->alive() = false;
+                        (*q)->alive() = false;
+                    }
+                }
+            }
+        }
+}

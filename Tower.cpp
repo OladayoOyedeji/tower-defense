@@ -1,5 +1,22 @@
 #include "Tower.h"
 
+bool big_p(Ball * ball1, Ball * ball2)
+{
+    return ball1->rad() > ball2->rad();
+}
+bool smal_p(Ball * ball1, Ball * ball2)
+{
+    return ball1->rad() < ball2->rad();
+}
+bool fast_p(Ball * ball1, Ball * ball2)
+{
+    return ball1->vel() > ball2->vel();
+}
+bool slow_p(Ball * ball1, Ball * ball2)
+{
+    return ball1->vel() < ball2->vel();
+}
+
 Surface * Tower::surface_ = NULL;
 
 void Tower::set_surface(Surface * surface)
@@ -7,82 +24,63 @@ void Tower::set_surface(Surface * surface)
     surface_ = surface;
 }
 
-Tower::Tower(int cntrx, int cntry)
-    : cntr_(cntrx, cntry), target_(cntrx, cntry),
-      r_(10), mouth_(cntrx, cntry, double(0), double(r_ + 10)),
-      a_(0), da_(-0.05), range_(100), timer_(0), ball_(NULL)
-{}
-
 void Tower::push(Ball * ball)
 {
     if (in_range(ball))
-        victims_.push_back(ball);
+        victims_.insert(ball);
 }
 
 void Tower::x_y(const int x, const int y)
 {
-    int dx = x - cntr_.x();
-    int dy = y - cntr_.y();
-    move(dx, dy);
+    int dx = x - pos_.x();
+    int dy = y - pos_.y();
+    dir_(double(dx), double(dy));
+    move();
 }
 void Tower::run()
 {
-    for (std::list< Bullet * >::iterator p = amo.begin();
-         p != amo.end(); ++p)
-    {
-        (*p)->run();
-        if ((*p)->x() < 0 || (*p)->x() >= W || (*p)->y() >= H || (*p)->x() < 0)
-        {
-            std::list< Bullet * >::iterator q = p;
-            ++p;
-            delete (*q);
-            amo.erase(q);
-            if (p == amo.end())
-            {break;}
-        }
-    }
+    // for (std::list< Bullet * >::iterator p = amo.begin();
+    //      p != amo.end(); ++p)
+    // {
+    //     (*p)->run();
+    //     if ((*p)->x() < 0 || (*p)->x() >= W || (*p)->y() >= H || (*p)->x() < 0)
+    //     {
+    //         std::list< Bullet * >::iterator q = p;
+    //         ++p;
+    //         delete (*q);
+    //         amo.erase(q);
+    //         if (p == amo.end())
+    //         {break;}
+    //     }
+    // }
         
-    if (!(victims_.empty()))
+    if (!(victims_.is_empty()))
     {
-        std::list< Ball * >::iterator p = victims_.begin();
-        if (in_range(*p) && (*p)->alive_)
-            target(*(victims_.begin()));
-        else
-            victims_.erase(p);    
+        // std::list< Ball * >::iterator p = victims_.begin();
+        // if (in_range(*p) && (*p)->alive_)
+        //     target(*(victims_.begin()));
+        // else
+        //     victims_.erase(p); 
+        target(victims_.max());
+        victims_.clear();
     }
-    if (timer_ % 100 == 0 && victims_.size() != 0)
-    {
-        shoot();
-    }
+    // if (timer_ % 100 == 0 && victims_.size() != 0)
+    // {
+    //     shoot();
+    // }
     ++timer_;
 }
-void Tower::rotate()
-{
-    a_ += da_;
-    if (a_ > 3.1414 * 2)
-    {
-        a_ -= 3.1414 * 2;
-    }
-    else if (a_ < 0)
-    {
-        a_ += 3.1414 * 2;
-    }
-    int endy = mouth_.d_ * sin(a_) + cntr_.y();
-    int endx = mouth_.d_ * cos(a_) + cntr_.x();
-    mouth_(endx, endy);
-}
-
 void Tower::draw()
 {
-    surface_->put_circle(cntr_, r_, BLUE);
+    surface_->put_circle(pos_, radius_, color_);
     target_.draw();
     mouth_.draw();
-    for (std::list< Bullet * >::iterator p = amo.begin();
-         p != amo.end(); ++p)
-    {
-        (*p)->draw();
-    }
-    surface_->put_unfilled_circle(cntr_, range_, WHITE);
+    // for (std::list< Bullet * >::iterator p = amo.begin();
+    //      p != amo.end(); ++p)
+    // {
+    //     (*p)->draw();
+    // }
+    surface_->put_unfilled_circle(pos_, range_, color_);
 }
 
 Line Tower::target(Ball * ball)
@@ -95,21 +93,21 @@ Line Tower::target(Ball * ball)
     //     dir.set_y(-1);
     //     dir.set_x(-1);
     // }
-    target_ = Line(target_.begin(), ball->pos());
+    target_ = Line(pos(), ball->pos());
     return target_;
 }
 
-void Tower::shoot()
-{
-    amo.push_back(new Bullet(target_));
-}
+// void Tower::shoot()
+// {
+//     amo.push_back(new Bullet(target_));
+// }
 
-void Tower::move(int dx, int dy)
-{
-    target_.move(dx, dy);
-    cntr_.move(dx, dy);
-    mouth_.move(dx, dy);
-}
+// void Tower::move(int dx, int dy)
+// {
+//     target_.move(dx, dy);
+//     cntr_.move(dx, dy);
+//     mouth_.move(dx, dy);
+// }
 
 
 

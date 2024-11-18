@@ -137,6 +137,10 @@ public:
     {
         return vec2(x_ / i, y_ / i);
     }
+    void operator()(const T & x, const T & y)
+    {
+        x_ = x; y_ = y;
+    }
     double len() const
     {
         return sqrt((x_ * x_) + (y_ * y_));

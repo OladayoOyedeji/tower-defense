@@ -5,6 +5,7 @@
 #include "Surface.h"
 #include "GameObject.h"
 #include "Bullet.h"
+#include "Priority.h"
 #include <cmath>
 
 const int TOWER_RADIUS = 10;
@@ -18,29 +19,35 @@ const int TOWER_RANGE = 100;
  so i need to create a priority queue of all theses
  condition*/
 
+bool big_p(Ball * ball1, Ball * ball2);
+bool smal_p(Ball * ball1, Ball * ball2);
+bool fast_p(Ball * ball1, Ball * ball2);
+bool slow_p(Ball * ball1, Ball * ball2);
+
 class Tower: public GameObject
 {
 public:
     Tower()
     {}
-    Tower(const vec2i&, const Color&);
+    Tower(const vec2i& c, const Color& color, bool (*comp)(Ball *, Ball *))
+        : GameObject(c, TOWER_RADIUS, color), target_(c),
+          victims_(comp), range_(TOWER_RANGE), mouth_(c)
+    {}
     Tower(int cntrx, int cntry);
     
-    void rotate();
-    void draw();
-    void push(Ball * ball)
-    void move(int , int);
+    virtual void draw();
+    //virtual void move(int , int);
     int x()
     {
-        return cntr_.x();
+        return pos_.x();
     }
     int y()
     {
-        return cntr_.y();
+        return pos_.y();
     }
     int rad()
     {
-        return r_;
+        return radius_;
     }
     int range()
     {
@@ -48,72 +55,60 @@ public:
     }
     void x_y(const int x, const int y);
     Line target(Ball * ball);
-    void run();
+    Line target()
+    {
+        return target_;
+    }
+    virtual void run();
+    void push(Ball * ball);
     bool in_range(const Ball * ball)
     {
-        int r = ball->pos().dist(cntr_);
+        int r = ball->pos().dist(pos_);
         
         return r < range_;
     }
-    void anticlock()
-    {
-        da_ = abs(da_) * -1;
-        rotate();
-    }
-    void clock()
-    {
-        da_ = abs(da_);
-        rotate();
-    }
-    void shoot();
+    //void shoot();
     static void set_surface(Surface *);
-
 private:
-    double a_;
-    double da_;
     Line target_;
-    vec2i cntr_;
-    int r_, timer_;
-
+    int timer_;
     int range_;
     Line mouth_;
     static Surface * surface_;
-    std::list< Bullet * > amo;
-    std::list< Ball * > victims_;
-    //std::stack<>
-    Ball * ball_;
+
+    PriorityQueue< Ball * > victims_;
 };
 
 class B_tower : public Tower
 {
 public:
     B_tower(const vec2i & v)
-        : Tower(v, BLUE)
-    {}
+        : Tower(v, BLUE, &big_p)
+    {std::cout << "BLUE " << range() << std::endl;}
 };
 
 class R_tower : public Tower
 {
 public:
     R_tower(const vec2i & v)
-        : Tower(v, RED)
-    {}
+        : Tower(v, RED, &smal_p)
+    {std::cout << "RED " << range() << std::endl;}
 };
 
 class W_tower : public Tower
 {
 public:
     W_tower(const vec2i & v)
-        : Tower(v, WHITE)
-    {}
+        : Tower(v, WHITE, &fast_p)
+    {std::cout << "WHITE " << range() << std::endl;}
 };
 
 class G_tower : public Tower
 {
 public:
     G_tower(const vec2i & v)
-        : Tower(v, GREY)
-    {}
+        : Tower(v, GRAY, &slow_p)
+    {std::cout << "GRAY" << range() << std::endl;}
 };
 
 #endif

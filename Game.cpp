@@ -29,7 +29,7 @@ void Game::bloons_move()
         if (count_ % 30 == 0 && nums != num_bloons)
         {
             nums++;
-            bloons_.push_back(new Ball(&path_, rand() % 30 + 10, rand() / RAND_MAX + 2));
+            bloons_.push_back(new Ball(&path_, rand() % 30 + 10, (rand() / RAND_MAX * 4) + 1));
         }
         count_++;
         for (std::list< Ball * >::iterator p = bloons_.begin();
@@ -40,13 +40,14 @@ void Game::bloons_move()
             {
                 tower_[i]->push((*p));
                 tower_[i]->run();
+                int r = sqrt(((*p)->x() - tower_[i]->x()) * ((*p)->x() - tower_[i]->x()) + ((*p)->y() - tower_[i]->y()) * ((*p)->y() - tower_[i]->y()));
+                if (r < tower_[i]->range())
+                {
+                    //tower_[i]->push((*p));
+                    shoot((*p), tower_[i]);
+                }
             }
-            // int r = sqrt(((*p)->x() - t.x()) * ((*p)->x() - t.x()) + ((*p)->y() - t.y()) * ((*p)->y() - t.y()));
-            // if (r < t.range())
-            // {
-            //     //t.push((*p));
-            //     shoot((*p));
-            // }
+            
             
             if ((*p)->x() - (*p)->rad() >= W || (*p)->alive_ == false)
             {
@@ -91,20 +92,26 @@ void Game::draw()
     for (int i = 0; i < tower_.size(); ++i)
     {
         tower_[i]->draw();
+        //std::cout << i + 1 << std::endl;
+    }
+    for (std::list< Bullet * >::iterator p = amo_.begin();
+         p != amo_.end(); ++p)
+    {
+        (*p)->draw();
     }
     //ball->draw();
     surface_->unlock();
         
     surface_->flip();
 }
-// void Game::shoot()
-// {
-//     for (int i = 0; i < num_tower; ++i)
-//     {
-        
-//         amo_.push_back(new Bullet(tower _[i]->target()));
-//     }
-// }
+void Game::shoot(Ball * ball, Tower * tower)
+{
+    if (a_timer_ % 101 == 0)
+    {
+        amo_.push_back(new Bullet(tower->target()));
+    }
+    ++a_timer_;
+}
 void Game::collision_detection()
 {
     //Quadtree(amo_, bloons_);
@@ -123,6 +130,11 @@ void Game::run()
         game_input(s_pressed);
         bloons_move();
         //shoot();
+        for (std::list< Bullet * >::iterator p = amo_.begin();
+             p != amo_.end(); ++p)
+        {
+            (*p)->run();
+        }
         collision_detection();
         draw();
         //delay();

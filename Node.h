@@ -5,6 +5,12 @@ class QuadTreeNode
 {
 public:
     QuadTreeNode(int startx, int starty, int endx, int endy,
+                 std::list< Bullet * > amo, std::list< Ball * > bloons)
+        : startx_(startx), starty_(starty), children_(4),
+          endx_(endx), endy_(endy), parent_(parent), amo_(amo),
+          bloons_(bloons)
+    {}
+    QuadTreeNode(int startx, int starty, int endx, int endy,
                  QuadTreeNode * parent = NULL)
         : startx_(startx), starty_(starty), children_(4),
           endx_(endx), endy_(endy), parent_(parent)

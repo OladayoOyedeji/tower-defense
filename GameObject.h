@@ -16,10 +16,17 @@ public:
     GameObject(const vec2i&, int, const vec2d&,
                double, const Color&);
     // towers constructor
-    GameObject(const vec2i&, int)
+    GameObject(const vec2i& pos, int radius, const Color& color)
+        : pos_(pos), radius_(radius), vel_(0),
+          color_(color), alive_(true)
+    {}
     virtual void move()
     {
         pos_ += dir_;
+    }
+    double vel() const
+    {
+        return vel_;
     }
     virtual void draw()
     {

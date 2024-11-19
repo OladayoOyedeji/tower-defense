@@ -14,17 +14,19 @@ const int fps = 60;
 class Game
 {
 public:
-    Game(Surface * surface)
-        : surface_(surface), tower_(num_R_tower + num_B_tower + num_W_tower + num_G_tower),
-          path_(W - 5, H - 5, 0, H/2), count_(0), a_timer_(0),
+    Game()
+        : surface_(new Surface(W, H)), tower_(num_R_tower + num_B_tower + num_W_tower + num_G_tower),
+          path_(W - 5, H - 5, 2, H/2), count_(0), a_timer_(0),
           RATE_(1000 / 60), bloons_move_(false)
     {
-        path_.set_surface(surface_);
+        Tower::set_surface(surface_);
+        Path::set_surface(surface_);
+        GameObject::set_surface(surface_);
+        
         path_.generate_path();
-        GameObject().set_surface(surface_);
+        
         for (int i = 0; i < tower_.size(); ++i )
         {
-            tower_[i]->set_surface(surface);
             if (i >= 0 && i < num_B_tower)
                 tower_[i] = new B_tower(vec2i(0 + 10, 0 + 10));
             else if (i >= num_W_tower && i < num_B_tower + num_R_tower)

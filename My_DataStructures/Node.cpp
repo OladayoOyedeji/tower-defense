@@ -1,4 +1,5 @@
 #include "Node.h"
+#include "Color.h"
 
 void QuadTreeNode::insert(Bullet * bul)
 {
@@ -6,9 +7,9 @@ void QuadTreeNode::insert(Bullet * bul)
     {
         for (int i = 0; i < children_.size(); ++i)
         {
-            if (children_[i] != NULL && (bul->x() < children_[i]->startx_ &&
+            if (children_[i] != NULL && (bul->x() > children_[i]->startx_ &&
                                          bul->x() < children_[i]->endx_ &&
-                                         bul->y() < children_[i]->starty_ &&
+                                         bul->y() > children_[i]->starty_ &&
                                          bul->y() < children_[i]->endy_))
             {
                 children_[i]->insert(bul);
@@ -27,12 +28,12 @@ void QuadTreeNode::insert(Ball * bul)
     {
         for (int i = 0; i < children_.size(); ++i)
         {
-            if (children_[i] != NULL && (bul->x() < children_[i]->startx_ &&
+            if (children_[i] != NULL && (bul->x() > children_[i]->startx_ &&
                                          bul->x() < children_[i]->endx_ &&
-                                         bul->y() < children_[i]->starty_ &&
+                                         bul->y() > children_[i]->starty_ &&
                                          bul->y() < children_[i]->endy_))
             {
-                
+                std::cout << i << std::endl;
                 children_[i]->insert(bul);
                 break;
             }
@@ -48,9 +49,9 @@ void QuadTreeNode::child_insert(Bullet * bul)
 {  
     for (int i = 0; i < children_.size(); ++i)
     {
-        if (children_[i] != NULL && (bul->x() < children_[i]->startx_ &&
+        if (children_[i] != NULL && (bul->x() > children_[i]->startx_ &&
                                      bul->x() < children_[i]->endx_ &&
-                                     bul->y() < children_[i]->starty_ &&
+                                     bul->y() > children_[i]->starty_ &&
                                      bul->y() < children_[i]->endy_))
         {
                 
@@ -63,9 +64,9 @@ void QuadTreeNode::child_insert(Ball * bul)
 {  
     for (int i = 0; i < children_.size(); ++i)
     {
-        if (children_[i] != NULL && (bul->x() < children_[i]->startx_ &&
+        if (children_[i] != NULL && (bul->x() > children_[i]->startx_ &&
                                      bul->x() < children_[i]->endx_ &&
-                                     bul->y() < children_[i]->starty_ &&
+                                     bul->y() > children_[i]->starty_ &&
                                      bul->y() < children_[i]->endy_))
         {
                 
@@ -123,14 +124,18 @@ void QuadTreeNode::split()
         {
             int midx = (endx_ - startx_) / 2 + startx_;
             int midy = (endy_ - starty_) / 2 + starty_;
-            children_[0] = (new QuadTreeNode(startx_, starty_, midx, midy));
-            children_[1] = (new QuadTreeNode(midx, starty_, endx_, midy));
-            children_[2] = (new QuadTreeNode(startx_, midy, midx, endy_));
-            children_[3] = (new QuadTreeNode(midx, midy, endy_, endx_));
+            children_[0] = (new QuadTreeNode(startx_, starty_, midx, midy, this));
+            children_[1] = (new QuadTreeNode(midx, starty_, endx_, midy, this));
+            children_[2] = (new QuadTreeNode(startx_, midy, midx, endy_, this));
+            children_[3] = (new QuadTreeNode(midx, midy, endy_, endx_, this));
             for (std::list<Bullet *>::iterator p = amo_.begin();
                  p != amo_.end(); ++p)
             {
-                child_insert(*p);
+                if ((*p)->x() > startx_ &&
+                    (*p)->x() < endx_ &&
+                    (*p)->y() > starty_ &&
+                    (*p)->y() < endy_)
+                    child_insert(*p);
             }
 
             int i = 0;
@@ -138,7 +143,11 @@ void QuadTreeNode::split()
                  p != bloons_.end(); ++p)
             {
                 //std::cout << bloons_.size() << ' ' << i++ << std::endl;
-                child_insert(*p);
+                if ((*p)->x() > startx_ &&
+                    (*p)->x() < endx_ &&
+                    (*p)->y() > starty_ &&
+                    (*p)->y() < endy_)
+                    child_insert(*p);
             }
             for (int i = 0; i < 4; ++i)
             {
@@ -150,7 +159,7 @@ void QuadTreeNode::split()
         }
         else
         {
-            std::cout << "hello\n";
+            //std::cout << "hello\n";
             collision();
         }
     }
@@ -162,13 +171,13 @@ void QuadTreeNode::collision()
         for (std::list<Bullet *>::iterator p = amo_.begin();
              p != amo_.end(); ++p)
         {
-            std::cout << "check2\n";
             if ((*p)->alive() == true)
             {
-                std::cout << "check\n";
+                
                 for (std::list<Ball *>::iterator q = bloons_.begin();
                      q != bloons_.end(); ++q)
                 {
+                    std::cout << "check\n";
                     int r = (*p)->radius() + (*q)->rad();
                     if ((*p)->pos().dist((*p)->pos()) < r)
                     {
@@ -179,6 +188,32 @@ void QuadTreeNode::collision()
                 }
             }
             else break;
+        }
+    }
+}
+
+void QuadTreeNode::draw(Surface & surface)
+{
+    Line l1(vec2i(startx_, starty_), vec2i(startx_, endy_));
+    l1.draw();
+    
+    Line l2(vec2i(startx_, starty_), vec2i(endx_, starty_));
+    l2.draw();
+    
+    Line l3(vec2i(endx_, starty_), vec2i(endx_, endy_));
+    l3.draw();
+    
+    Line l4(vec2i(startx_, endy_), vec2i(endx_, endy_));
+    l4.draw();
+    // surface.put_line(startx_, starty_, endx_, starty_, WHITE);
+    // surface.put_line(startx_, starty_, startx_, endy_, WHITE);
+    // surface.put_line(startx_, endy_, endx_, endy_, WHITE);
+    // surface.put_line(endx_, starty_, endx_, endy_, WHITE);
+    for(int i = 0; i < children_.size(); ++i)
+    {
+        if (children_[i] != NULL)
+        {
+            children_[i]->draw(surface);
         }
     }
 }

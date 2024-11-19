@@ -19,6 +19,7 @@ public:
         : w(w_), h(h_), startx(startx_), starty(starty_), dir_(HORIZONTAL)
           
     {
+        
         endx = startx_ + w_;
         endy = starty_ + h_;
         std::cout << endx << ' ' << endy << std::endl;

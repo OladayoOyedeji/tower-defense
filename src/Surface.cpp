@@ -30,17 +30,17 @@ void put_pixel_bpp2( SDL_Surface* surface, int x, int y, Uint32 pixel)
 
 void put_pixel_bpp3( SDL_Surface * surface, int x, int y, Uint32 pixel)
 {
-	int bpp = surface->format->BytesPerPixel;
+    int bpp = surface->format->BytesPerPixel;
     Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
     if(SDL_BYTEORDER == SDL_BIG_ENDIAN) 
-	{
-		p[0] = (pixel >> 16) & 0xff;
-		p[1] = (pixel >> 8) & 0xff;
+    {
+        p[0] = (pixel >> 16) & 0xff;
+        p[1] = (pixel >> 8) & 0xff;
         p[2] = pixel & 0xff;
-	} 
-	else
-	{
-		p[0] = pixel & 0xff;
+    } 
+    else
+    {
+        p[0] = pixel & 0xff;
         p[1] = (pixel >> 8) & 0xff;
         p[2] = (pixel >> 16) & 0xff;
     }
@@ -48,7 +48,7 @@ void put_pixel_bpp3( SDL_Surface * surface, int x, int y, Uint32 pixel)
 
 void put_pixel_bpp4( SDL_Surface * surface, int x, int y, Uint32 pixel)
 {
-	int bpp = surface->format->BytesPerPixel;
+    int bpp = surface->format->BytesPerPixel;
     Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
     *(Uint32 *)p = pixel;
 }

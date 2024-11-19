@@ -5,6 +5,7 @@
 #include <list>
 #include <vector>
 #include "Bullet.h"
+#include "Surface.h"
 
 
 class QuadTreeNode
@@ -36,6 +37,8 @@ public:
     void collision();
     bool empty();
     void clear_children();
+
+    void draw(Surface & surface);
         
 private:
     std::list< Bullet * > amo_;

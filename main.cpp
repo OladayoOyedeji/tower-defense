@@ -3,9 +3,7 @@
 int main(int argc, char* argv[])
 {
     srand((unsigned int) time(NULL));
-    Surface surface(W, H);
-    std::cout << &surface << std::endl;
-    Game game(&surface);
+    Game game;
     game.run();
     // Event event;
     // GameObject().set_surface(&surface);

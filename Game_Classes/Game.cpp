@@ -84,6 +84,8 @@ void Game::draw()
     surface_->lock();
     surface_->fill(BLACK);
     path_.draw();
+    
+    collision_detection();
     for (std::list< Ball * >::iterator p = bloons_.begin();
          p != bloons_.end(); ++p)
     {
@@ -114,7 +116,8 @@ void Game::shoot(Ball * ball, Tower * tower)
 }
 void Game::collision_detection()
 {
-    QuadTree(0, 0, W, H, amo_, bloons_);
+    QuadTree q(0, 0, W - 1, H - 1, amo_, bloons_);
+    q.draw(*surface_);
 }
 // void Game::delay()
 // {}
@@ -145,7 +148,6 @@ void Game::run()
             else
                 (*p)->run();
         }
-        collision_detection();
         draw();
         //delay();
         int end = getTicks();

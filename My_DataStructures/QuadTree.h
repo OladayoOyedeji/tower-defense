@@ -17,6 +17,10 @@ class QuadTree
         root_->clear_children();
         delete root_;
     }
+    void draw(Surface &surface)
+    {
+        root_->draw(surface);
+    }
   private:
     QuadTreeNode * root_;
 };

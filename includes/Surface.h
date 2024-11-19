@@ -99,12 +99,12 @@ public:
 	void	put_line( int x0, int y0, int x1, int y1, Uint32 );
 	void	put_line( int x0, int y0, int x1, int y1, const Color & );
 	void	put_line( int x0, int y0, int x1, int y1, int, int, int );
-    void    put_line( vec2i & p0, vec2i & p1, int r, int b, int g )
+    void    put_line(const vec2i & p0,const vec2i & p1, int r, int b, int g )
         {
             put_line(p0.x(), p0.y(), p1.x(), p1.y(), r, b, g);
         }
 
-    void    put_line( vec2i & p0, vec2i & p1, const Color & color )
+    void    put_line(const vec2i & p0, const vec2i & p1, const Color & color )
         {
             put_line(p0.x(), p0.y(), p1.x(), p1.y(), color);
         }

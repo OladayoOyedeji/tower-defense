@@ -29,24 +29,25 @@ void Path::generate_path()
     int y = starty;
     int i = 0;
     int d = w;
-    while (x < endx-1 || y < endy || y > 0)
+    while (x < endx-1 && y < endy && y > 0)
     {
+        vec2i start(x, y);
+        vec2i end;
         if (dir_ == HORIZONTAL)
         {
             if (endx - x < w / 4)
             {
-                vec2i start(x, y);
-                vec2i end(endx - 1, y);
+                
+                end(endx - 1, y);
                 x = end.x(); y = end.y();
                 road_.push_back(new Line(start, end));
-                // std::cout << "1" << start << ' ' << end << std::endl;
+                std::cout << "1 " << start << ' ' << end << std::endl;
                 return;
             }
             else
             {
-                vec2i start(x, y);
                 int midx = (endx - x) / 2 + x;
-                vec2i end(rand() % (midx - x - 10) + x, y);
+                end(rand() % (midx - x - 10) + x, y);
                 x = end.x(); y = end.y();
                 road_.push_back(new Line(start, end));
                 // std::cout << "2" << start << ' ' << end << std::endl;
@@ -58,24 +59,23 @@ void Path::generate_path()
             int d = rand() % 2;
             if (d == 0)
             {
-                vec2i start(x, y);
                 int new_y = rand() % (y - starty - 1) + 10;
-                vec2i end(x, new_y);
+                end(x, new_y);
                 road_.push_back(new Line(start, end));
-                std::cout << "3" << start << ' ' << end << std::endl;
+                
                 x = end.x(); y = end.y();
                 dir_ = HORIZONTAL;
             }
             else
             {
-                vec2i start(x, y);
-                vec2i end(x, rand() % (endy - y) + 10);
+                end(x, rand() % (endy - y) + 10);
                 road_.push_back(new Line(start, end));
                 // std::cout << "4" << start << ' ' << end << std::endl;
                 x = end.x(); y = end.y();
                 dir_ = HORIZONTAL;
             }
         }
+        std::cout << "3 " << start << ' ' << end << std::endl;
         
     }
 }
@@ -92,6 +92,6 @@ void Path::draw()
 
 void Path::set_surface(Surface * surface)
 {
-    Line().set_surface(surface);
+    Line::set_surface(surface);
     surface_ = surface;
 }

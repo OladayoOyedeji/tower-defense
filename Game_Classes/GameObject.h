@@ -70,7 +70,7 @@ class Ball: public GameObject
 public:
     Ball(Path * path, int r, double vel)
         : path_(path), GameObject(path->start(), r,
-                                  path->vector(), vel * double(r)/30 + 1,
+                                  path->vector(), rand()/RAND_MAX * 5 + rand() % 2 + 2,
                                   RED), p(path_->begin())
     {
         

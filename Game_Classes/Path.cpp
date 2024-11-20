@@ -26,10 +26,10 @@ void Path::generate_path()
     clear();
     
     int x = startx;
-    int y = starty;
+    int y = (endy - starty) / 2 + starty;
     int i = 0;
     int d = w;
-    while (x < endx-1 && y < endy && y > 0)
+    while (x < endx-1 && y < endy && y > starty)
     {
         vec2i start(x, y);
         vec2i end;

@@ -127,7 +127,7 @@ void QuadTreeNode::split()
             children_[0] = (new QuadTreeNode(startx_, starty_, midx, midy, this));
             children_[1] = (new QuadTreeNode(midx, starty_, endx_, midy, this));
             children_[2] = (new QuadTreeNode(startx_, midy, midx, endy_, this));
-            children_[3] = (new QuadTreeNode(midx, midy, endy_, endx_, this));
+            children_[3] = (new QuadTreeNode(midx, midy, endx_, endy_, this));
             for (std::list<Bullet *>::iterator p = amo_.begin();
                  p != amo_.end(); ++p)
             {
@@ -194,6 +194,9 @@ void QuadTreeNode::collision()
 
 void QuadTreeNode::draw(Surface & surface)
 {
+    // std::cout << "new Node:\n";
+    // std::cout << vec2i(startx_, starty_) << "    " << vec2i(endx_, starty_) << std::endl;
+    // std::cout << vec2i(startx_, endy_) << "    " << vec2i(endx_, endy_) << std::endl;
     Line l1(vec2i(startx_, starty_), vec2i(startx_, endy_));
     l1.draw();
     

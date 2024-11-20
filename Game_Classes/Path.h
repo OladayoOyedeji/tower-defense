@@ -15,16 +15,22 @@ class Path
 public:
     Path()
     {}
-    Path(const int w_, const int h_, const int startx_, const int starty_)
-        : w(w_), h(h_), startx(startx_), starty(starty_), dir_(HORIZONTAL)
-          
+    Path(const int startx_, const int starty_, const int endx_, const int endy_)
+        : w(endx_ - startx_), h(endy_ - starty_), startx(startx_), starty(starty_),
+          endx(endx_), endy(endy_), dir_(HORIZONTAL)
     {
-        
-        endx = startx_ + w_;
-        endy = starty_ + h_;
-        std::cout << endx << ' ' << endy << std::endl;
         generate_path();
     }
+    // Path(const int w_, const int h_, const int startx_, const int starty_)
+    //     : w(w_), h(h_), startx(startx_), starty(starty_), dir_(HORIZONTAL)
+          
+    // {
+        
+    //     endx = startx_ + w_;
+    //     endy = starty_ + h_;
+    //     std::cout << endx << ' ' << endy << std::endl;
+    //     generate_path();
+    // }
     ~Path();
     void clear();
     void generate_path();

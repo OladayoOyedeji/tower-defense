@@ -10,6 +10,9 @@ run:
 r:
 	./a.out
 
+g git:
+	git add .; git commit -m 'i am awesome'; git push
+
 clean:
 	rm a.out
 

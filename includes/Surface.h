@@ -144,6 +144,10 @@ public:
 	// Rectangle drawing
 	//------------------------------------------------------------------------
 	void put_rect( int x, int y, int w, int h, const Color & );
+    void put_rect( vec2i v, int w, int h, const Color & color)
+    {
+        put_rect( v.x(), v.y(), w, h, color);
+    }
 	void put_rect(const Rect & r, const Color & c)
 	{
 		put_rect(r.x, r.y, r.w, r.h, c);

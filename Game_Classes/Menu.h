@@ -3,49 +3,60 @@
 
 #include "Tower.h"
 
+// enum towers
+// {
+//     RED, BLUE, WHITE, GRAY;
+// };
+
+
+enum towers
+{
+    BLUE_, RED_, WHITE_, GRAY_
+};
+
+// increase the number of poss towers when the size exceeds it
+const int NUM_OF_POSSIBLE_TOWERS = 9;
+
 class Menu
 {
-  public:
-    Menu(int startx, int starty, int w, int h)
-        : startx_(startx), starty_(starty), w_(w), h_(h),
-        red_(vec2i(startx+w/4, starty + h/8)),
-        blue_(vec2i(startx + 3 * w/4, starty + h/8)),
-        white_((vec2i(startx+w/4, starty + h/4))),
-        green_(vec2i(startx + 3 * w/4, starty + h/4))
-    {}
-    vec2i Red() const
+public:
+    Menu(int startx, int starty, int w, int h, bool horizontal = true)
+        : startx_(startx), starty_(starty),
+          w_(w), h_(h),
+          towers({new B_tower, new R_tower, new W_tower, new G_tower})
     {
-        return red_.pos_;
+        double dx = double(w)/NUM_OF_POSSIBLE_TOWERS;
+        double x = (startx_ + dx) / 2;
+        for (int i = 0; i < towers.size(); ++i)
+        {
+            std::cout << "starty: " << starty_ << std::endl;
+            towers[i]->x_y(x, starty + h/2);
+            x += dx;
+        }
     }
-    vec2i Blue() const
+    ~Menu()
     {
-        return blue_.pos_;
+        for (int i = 0; i < towers.size(); ++i)
+        {
+            delete towers[i];
+        }
     }
-    
-    vec2i White() const
+    vec2i set(int i) const
     {
-        return white_.pos_;
-    }
-    
-    vec2i Green() const
-    {
-        return green_.pos_;
+        return towers[i]->pos();
     }
     void draw(Surface & surface)
     {
-        surface.put_rect(startx_, starty_, w_, h_, DARKGRAY);
-        red_.draw();
-        blue_.draw();
-        white_.draw();
-        green_.draw();
+        surface.put_rect(startx_, starty_,
+                         w_, h_, DARKGRAY);
+        for (int i = 0; i < towers.size(); ++i)
+        {
+            towers[i]->draw();
+        }
     }
-  private:
+private:
     int startx_, starty_, w_, h_;
-    R_tower red_;
-    B_tower blue_;
-    W_tower white_;
-    G_tower green_;
-    
+    std::vector<Tower * > towers;
 };
 
 #endif

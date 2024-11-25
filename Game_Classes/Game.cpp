@@ -1,14 +1,18 @@
 #include "Game.h"
 
-const int MENU_WIDTH = 200;
-const int PATH_WIDTH = W - MENU_WIDTH;
-const int PATH_HEIGHT = H - 1;
+const int STATUS_BAR_HEIGHT = 50;
+const int MENU_HEIGHT = 100;
+const int PATH_WIDTH = W - 50;
+const int PATH_HEIGHT = H - MENU_HEIGHT - 50;
+
+Image Game::image_ = "images/BackGround.jpg";
 
 Game::Game()
-    : surface_(new Surface(W, H)), tower_(num_R_tower + num_B_tower + num_W_tower + num_G_tower),
-      path_(5, 5, PATH_WIDTH, PATH_HEIGHT), count_(0), a_timer_(0),
-      menu_(PATH_WIDTH, 0, MENU_WIDTH, H),
-      RATE_(1000 / 60), bloons_move_(false)
+    : surface_(new Surface(W, H)),
+      tower_(num_R_tower + num_B_tower + num_W_tower + num_G_tower),
+      path_(5, STATUS_BAR_HEIGHT, PATH_WIDTH, PATH_HEIGHT), count_(0), a_timer_(0),
+      menu_(0, 50 + PATH_HEIGHT, W, MENU_HEIGHT),
+      RATE_(1000 / fps), bloons_move_(false)
 {
     Tower::set_surface(surface_);
     Path::set_surface(surface_);
@@ -20,22 +24,22 @@ Game::Game()
     {
         if (i >= 0 && i < num_B_tower)
         {
-            tower_[i] = new B_tower(menu_.Blue());
+            tower_[i] = new B_tower(menu_.set(BLUE_));
             B_mouse_mov_.push(tower_[i]);
         }
         else if (i >= num_W_tower && i < num_B_tower + num_R_tower)
         {
-            tower_[i] = new R_tower(menu_.Red());
+            tower_[i] = new R_tower(menu_.set(RED_));
             R_mouse_mov_.push(tower_[i]);
         }
         else if (i >= num_B_tower + num_R_tower && i < num_B_tower + num_R_tower + num_W_tower)
         {
-            tower_[i] = new W_tower(menu_.White());
+            tower_[i] = new W_tower(menu_.set(WHITE_));
             B_mouse_mov_.push(tower_[i]);
         }
         else
         {
-            tower_[i] = new G_tower(menu_.Green());
+            tower_[i] = new G_tower(menu_.set(GRAY_));
             G_mouse_mov_.push(tower_[i]);
         }
         
@@ -157,7 +161,7 @@ void Game::bloons_move()
             if ((*p)->x() - (*p)->rad() >= W || (*p)->alive_ == false)
             {
                 std::list< Ball * >::iterator q = p;
-                ++p;
+                --p;
                 delete (*q);
                 bloons_.erase(q);
                 if (p == bloons_.end())
@@ -198,10 +202,18 @@ void Game::game_input(bool & s_pressed)
     }
 }
 
+
+void Game::put_background()
+{
+    Rect rect(0, 0, W, H);
+    surface_->put_image(image_, rect);
+}
+
 void Game::draw()
 {
     surface_->lock();
     surface_->fill(BLACK);
+    put_background();
     path_.draw();
     
     
@@ -228,7 +240,7 @@ void Game::draw()
 }
 void Game::shoot(Ball * ball, Tower * tower)
 {
-    if (a_timer_ % 101 == 0)
+    if (a_timer_ % 100 == 0)
     {
         amo_.push_back(new Bullet(tower->target(ball)));
     }
@@ -237,7 +249,7 @@ void Game::shoot(Ball * ball, Tower * tower)
 void Game::collision_detection()
 {
     QuadTree q(0, 0, W - 1, H - 1, amo_, bloons_);
-    //q.draw(*surface_);
+    q.draw(*surface_);
 }
 // void Game::delay()
 // {}
@@ -260,7 +272,7 @@ void Game::run()
             if ((*p)->x() - (*p)->radius() >= W || (*p)->alive_ == false)
             {
                 std::list< Bullet * >::iterator q = p;
-                ++p;
+                --p;
                 delete (*q);
                 amo_.erase(q);
                 if (p == amo_.end())
@@ -271,8 +283,8 @@ void Game::run()
                 (*p)->run();
             }
         }
-        collision_detection();
         draw();
+        collision_detection();
         //delay();
         int end = getTicks();
         int dt = RATE_ - end + start;

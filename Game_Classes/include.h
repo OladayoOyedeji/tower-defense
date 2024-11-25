@@ -9,6 +9,7 @@
 #include <sstream>
 
 #include "Includes.h"
+#include "Image.h"
 #include "Constants.h"
 #include "compgeom.h"
 #include "Surface.h"

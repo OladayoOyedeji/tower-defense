@@ -14,7 +14,7 @@ const int TOWER_RANGE = 100;
 /*the blue towers priority is the balls faster
  the reds priority is is the slower balls
  the whites priority is the bigger balls
- and the grey priority is the slower balls
+ and the grey priority is the smaller balls
 
  so i need to create a priority queue of all theses
  condition*/
@@ -82,7 +82,7 @@ private:
 class B_tower : public Tower
 {
 public:
-    B_tower(const vec2i & v)
+    B_tower(const vec2i & v = vec2i())
         : Tower(v, BLUE, &big_p)
     {std::cout << "BLUE " << range() << std::endl;}
 };
@@ -90,7 +90,8 @@ public:
 class R_tower : public Tower
 {
 public:
-    R_tower(const vec2i & v)
+    
+    R_tower(const vec2i & v = vec2i())
         : Tower(v, RED, &smal_p)
     {std::cout << "RED " << range() << std::endl;}
 };
@@ -98,7 +99,7 @@ public:
 class W_tower : public Tower
 {
 public:
-    W_tower(const vec2i & v)
+    W_tower(const vec2i & v = vec2i())
         : Tower(v, WHITE, &fast_p)
     {std::cout << "WHITE " << range() << std::endl;}
 };
@@ -106,7 +107,7 @@ public:
 class G_tower : public Tower
 {
 public:
-    G_tower(const vec2i & v)
+    G_tower(const vec2i & v = vec2i())
         : Tower(v, GRAY, &slow_p)
     {std::cout << "GRAY" << range() << std::endl;}
 };

@@ -10,6 +10,7 @@ class QuadTree
              std::list< Bullet * > & amo, std::list< Ball * > & bloons)
         : root_(new QuadTreeNode(startx, starty, endx, endy, amo, bloons))
     {
+        
         root_->split();
     }
     ~QuadTree()

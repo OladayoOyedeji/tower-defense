@@ -157,6 +157,7 @@ public:
         y_ /= len_;
     }
   private:
+    
     T x_, y_;
 };
 

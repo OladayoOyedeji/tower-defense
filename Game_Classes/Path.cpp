@@ -57,18 +57,24 @@ void Path::generate_path()
         else
         {
             int d = rand() % 2;
+            if (y - starty < 30)
+            {
+                d = 1;
+            }
             if (d == 0)
             {
-                int new_y = rand() % (y - starty - 1) + 10;
+                int new_y = rand() % (y - starty - 1) + starty;
+                std::cout << "new_y:" << new_y << " starty: " << starty << std::endl;
                 end(x, new_y);
                 road_.push_back(new Line(start, end));
                 
                 x = end.x(); y = end.y();
+                std::cout << "new vector: " << end << std::endl;
                 dir_ = HORIZONTAL;
             }
             else
             {
-                end(x, rand() % (endy - y) + 10);
+                end(x, rand() % (endy - y) + y);
                 road_.push_back(new Line(start, end));
                 // std::cout << "4" << start << ' ' << end << std::endl;
                 x = end.x(); y = end.y();

@@ -73,9 +73,9 @@ void Tower::run()
 void Tower::draw()
 {
     surface_->put_circle(pos_, radius_, color_);
-    target_.draw();
+    //target_.draw();
     mouth_.draw();
-    surface_->put_unfilled_circle(pos_, range_, color_);
+    //surface_->put_unfilled_circle(pos_, range_, color_);
 }
 
 Line Tower::target(Ball * ball)

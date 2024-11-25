@@ -99,19 +99,19 @@ void QuadTreeNode::clear_children()
     if (children_[1] != NULL)
     {
         children_[1]->clear_children();
-        delete children_[0];
+        delete children_[1];
         children_[1] = NULL;
     }
     if (children_[2] != NULL)
     {
         children_[2]->clear_children();
-        delete children_[0];
+        delete children_[2];
         children_[2] = NULL;
     }
     if (children_[3] != NULL)
     {
         children_[3]->clear_children();
-        delete children_[0];
+        delete children_[3];
         children_[3] = NULL;
     }
         
@@ -122,6 +122,7 @@ void QuadTreeNode::split()
     {
         if (bloons_.size() + amo_.size() > 8)
         {
+            std::cout << "split" << std::endl;
             int midx = (endx_ - startx_) / 2 + startx_;
             int midy = (endy_ - starty_) / 2 + starty_;
             children_[0] = (new QuadTreeNode(startx_, starty_, midx, midy, this));
@@ -137,12 +138,10 @@ void QuadTreeNode::split()
                     (*p)->y() < endy_)
                     child_insert(*p);
             }
-
-            int i = 0;
+            
             for (std::list<Ball *>::iterator p = bloons_.begin();
                  p != bloons_.end(); ++p)
             {
-                //std::cout << bloons_.size() << ' ' << i++ << std::endl;
                 if ((*p)->x() > startx_ &&
                     (*p)->x() < endx_ &&
                     (*p)->y() > starty_ &&
@@ -171,20 +170,25 @@ void QuadTreeNode::collision()
         for (std::list<Bullet *>::iterator p = amo_.begin();
              p != amo_.end(); ++p)
         {
-            if ((*p)->alive() == true)
+            if ((*p)->alive())
             {
                 
                 for (std::list<Ball *>::iterator q = bloons_.begin();
                      q != bloons_.end(); ++q)
                 {
-                    std::cout << "check\n";
-                    int r = (*p)->radius() + (*q)->rad();
-                    if ((*p)->pos().dist((*p)->pos()) < r)
+
+                    if ((*q)->alive())
                     {
-                        (*p)->alive() = false;
-                        (*q)->alive() = false;
-                        break;
+                        //std::cout << "check\n";
+                        int r = (*p)->radius() + (*q)->rad();
+                        if ((*p)->pos().dist((*q)->pos()) < r)
+                        {
+                            (*p)->alive() = false;
+                            (*q)->alive() = false;
+                            break;
+                        }
                     }
+                    
                 }
             }
             else break;

@@ -9,7 +9,7 @@ const int num_B_tower = 3;
 const int num_W_tower = 3;
 const int num_G_tower = 3;
 const int num_bloons = 300;
-const int fps = 60;
+const int fps = 150;
 
 class Game
 {
@@ -20,6 +20,7 @@ public:
     void game_input(bool &);
     void bloons_move();
     void run();
+    void put_background();
     void draw();
     void shoot(Ball * ball, Tower * tower);
     void collision_detection();
@@ -45,7 +46,7 @@ private:
     int RATE_;
     Mouse mouse_;
     int count_;
-    
+    static Image image_;
 };
 
 #endif

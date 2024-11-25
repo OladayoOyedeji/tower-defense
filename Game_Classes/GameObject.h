@@ -11,6 +11,9 @@ class GameObject
 public:
     GameObject()
     {}
+    GameObject(const vec2i & pos)
+        : pos_(pos)
+    {}
     GameObject(int, int, int, double, double,
                double, const Color&);
     GameObject(const vec2i&, int, const vec2d&,
@@ -30,8 +33,7 @@ public:
     }
     virtual void draw()
     {
-        if (alive_)
-            surface_->put_circle(pos_, radius_, color_);
+        surface_->put_circle(pos_, radius_, color_);
     }
     virtual void run()
     {
@@ -70,7 +72,7 @@ class Ball: public GameObject
 public:
     Ball(Path * path, int r, double vel)
         : path_(path), GameObject(path->start(), r,
-                                  path->vector(), rand()/RAND_MAX * 5 + rand() % 2 + 2,
+                                  path->vector(), rand()/RAND_MAX * 2 + rand() % 2 + 1,
                                   RED), p(path_->begin())
     {
         
@@ -83,13 +85,10 @@ public:
     
     virtual void draw()
     {
-        if (alive_)
-        {
-            surface_->put_circle(pos_, radius_, color_);
-            surface_->put_unfilled_circle(pos_, radius_,
-                                          rand() % 255, rand() % 255,
-                                          rand() % 255);
-        }
+        surface_->put_circle(pos_, radius_, color_);
+        surface_->put_unfilled_circle(pos_, radius_,
+                                      rand() % 255, rand() % 255,
+                                      rand() % 255);
     }
     int x() const
     {

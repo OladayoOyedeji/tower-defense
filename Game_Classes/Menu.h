@@ -29,7 +29,7 @@ public:
         double x = (startx_ + dx) / 2;
         for (int i = 0; i < towers.size(); ++i)
         {
-            std::cout << "starty: " << starty_ << std::endl;
+            //std::cout << "starty: " << starty_ << std::endl;
             towers[i]->x_y(x, starty + h/2);
             x += dx;
         }
@@ -53,6 +53,10 @@ public:
         {
             towers[i]->draw();
         }
+    }
+    int size() const
+    {
+        return towers.size();
     }
 private:
     int startx_, starty_, w_, h_;

@@ -84,7 +84,7 @@ class B_tower : public Tower
 public:
     B_tower(const vec2i & v = vec2i())
         : Tower(v, BLUE, &big_p)
-    {std::cout << "BLUE " << range() << std::endl;}
+    {}
 };
 
 class R_tower : public Tower
@@ -93,7 +93,7 @@ public:
     
     R_tower(const vec2i & v = vec2i())
         : Tower(v, RED, &smal_p)
-    {std::cout << "RED " << range() << std::endl;}
+    {}
 };
 
 class W_tower : public Tower
@@ -101,7 +101,7 @@ class W_tower : public Tower
 public:
     W_tower(const vec2i & v = vec2i())
         : Tower(v, WHITE, &fast_p)
-    {std::cout << "WHITE " << range() << std::endl;}
+    {}
 };
 
 class G_tower : public Tower
@@ -109,7 +109,7 @@ class G_tower : public Tower
 public:
     G_tower(const vec2i & v = vec2i())
         : Tower(v, GRAY, &slow_p)
-    {std::cout << "GRAY" << range() << std::endl;}
+    {}
 };
 
 #endif

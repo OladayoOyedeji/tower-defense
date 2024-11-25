@@ -41,7 +41,7 @@ void Path::generate_path()
                 end(endx - 1, y);
                 x = end.x(); y = end.y();
                 road_.push_back(new Line(start, end));
-                std::cout << "1 " << start << ' ' << end << std::endl;
+                // std::cout << "1 " << start << ' ' << end << std::endl;
                 return;
             }
             else
@@ -64,12 +64,12 @@ void Path::generate_path()
             if (d == 0)
             {
                 int new_y = rand() % (y - starty - 1) + starty;
-                std::cout << "new_y:" << new_y << " starty: " << starty << std::endl;
+                // std::cout << "new_y:" << new_y << " starty: " << starty << std::endl;
                 end(x, new_y);
                 road_.push_back(new Line(start, end));
                 
                 x = end.x(); y = end.y();
-                std::cout << "new vector: " << end << std::endl;
+                // std::cout << "new vector: " << end << std::endl;
                 dir_ = HORIZONTAL;
             }
             else
@@ -81,7 +81,7 @@ void Path::generate_path()
                 dir_ = HORIZONTAL;
             }
         }
-        std::cout << "3 " << start << ' ' << end << std::endl;
+        // std::cout << "3 " << start << ' ' << end << std::endl;
         
     }
 }

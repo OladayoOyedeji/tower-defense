@@ -19,28 +19,29 @@ Game::Game()
     GameObject::set_surface(surface_);
         
     path_.generate_path();
+    mouse_mov_.resize(menu_.size());
         
     for (int i = 0; i < tower_.size(); ++i )
     {
         if (i >= 0 && i < num_B_tower)
         {
             tower_[i] = new B_tower(menu_.set(BLUE_));
-            B_mouse_mov_.push(tower_[i]);
+            mouse_mov_[BLUE_].push(tower_[i]);
         }
         else if (i >= num_W_tower && i < num_B_tower + num_R_tower)
         {
             tower_[i] = new R_tower(menu_.set(RED_));
-            R_mouse_mov_.push(tower_[i]);
+            mouse_mov_[RED_].push(tower_[i]);
         }
         else if (i >= num_B_tower + num_R_tower && i < num_B_tower + num_R_tower + num_W_tower)
         {
             tower_[i] = new W_tower(menu_.set(WHITE_));
-            B_mouse_mov_.push(tower_[i]);
+            mouse_mov_[WHITE_].push(tower_[i]);
         }
         else
         {
             tower_[i] = new G_tower(menu_.set(GRAY_));
-            G_mouse_mov_.push(tower_[i]);
+            mouse_mov_[GRAY_].push(tower_[i]);
         }
         
     }

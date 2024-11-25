@@ -122,7 +122,6 @@ void QuadTreeNode::split()
     {
         if (bloons_.size() + amo_.size() > 8)
         {
-            std::cout << "split" << std::endl;
             int midx = (endx_ - startx_) / 2 + startx_;
             int midy = (endy_ - starty_) / 2 + starty_;
             children_[0] = (new QuadTreeNode(startx_, starty_, midx, midy, this));

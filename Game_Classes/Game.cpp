@@ -1,4 +1,5 @@
 #include "Game.h"
+#include <string>
 
 const int STATUS_BAR_HEIGHT = 50;
 const int MENU_HEIGHT = 100;
@@ -33,7 +34,8 @@ Game::Game()
             tower_[i] = new R_tower(menu_.set(RED_));
             mouse_mov_[RED_].push(tower_[i]);
         }
-        else if (i >= num_B_tower + num_R_tower && i < num_B_tower + num_R_tower + num_W_tower)
+        else if (i >= num_B_tower + num_R_tower &&
+                 i < num_B_tower + num_R_tower + num_W_tower)
         {
             tower_[i] = new W_tower(menu_.set(WHITE_));
             mouse_mov_[WHITE_].push(tower_[i]);
@@ -72,78 +74,76 @@ Game::~Game()
 
 void Game::mouse_move()
 {
-    static bool R_click = false;
-    static bool B_click = false;
-    static bool G_click = false;
-    static bool W_click = false;
-    if (!(R_mouse_mov_.empty()))
+    static bool move = false;
+    if (mouse_mov_[0].empty()) return;
+    Tower * t = mouse_mov_[0].top();
+    if (event_.type() == MOUSEMOTION)
     {
-        Tower * t = R_mouse_mov_.top();
-        if (mouse_.left() && in_ob(mouse_, *t))
+        std::cout << "move\n";
+        mouse_.update(event_);
+        if (move)
         {
-            mouse_.update(event_);
             t->x_y(mouse_.x(), mouse_.y());
-            R_click = true;
         }
-        else if (!(mouse_.left()) && R_click)
-        {
-            R_mouse_mov_.pop();
-            R_click = false;
-        }
-        else
-            mouse_.update(event_);
     }
-    if (!(B_mouse_mov_.empty()))
+    else if (event_.type() == MOUSEBUTTONDOWN)
     {
-        Tower * t = B_mouse_mov_.top();
-        if (mouse_.left() && in_ob(mouse_, *t))
-        {
-            mouse_.update(event_);
-            t->x_y(mouse_.x(), mouse_.y());
-            B_click = true;
-        }
-        else if (!(mouse_.left()) && B_click)
-        {
-            B_mouse_mov_.pop();
-            B_click = false;
-        }
-        else
-            mouse_.update(event_);
+        std::cout << "mouse down\n";
+        // do nothing ... pick up and put down
+        // happens only when the button is released
     }
-    if (!(G_mouse_mov_.empty()))
+    else if (event_.type() == MOUSEBUTTONUP)
     {
-        Tower * t = G_mouse_mov_.top();
-        if (mouse_.left() && in_ob(mouse_, *t))
+        std::cout << "mouse up\n";
+        mouse_.update(event_);
+        if (in_ob(mouse_, *t))
         {
-            mouse_.update(event_);
-            t->x_y(mouse_.x(), mouse_.y());
-            G_click = true;
+            move = !move;
+            std::cout << move << std::endl;
+            if (!move)
+            {
+                mouse_mov_[0].pop();
+            }
         }
-        else if (!(mouse_.left()) && G_click)
-        {
-            G_mouse_mov_.pop();
-            G_click = false;
-        }
-        else
-            mouse_.update(event_);
     }
-    if (!(W_mouse_mov_.empty()))
-    {
-        Tower * t = W_mouse_mov_.top();
-        if (mouse_.left() && in_ob(mouse_, *t))
-        {
-            mouse_.update(event_);
-            t->x_y(mouse_.x(), mouse_.y());
-            W_click = true;
-        }
-        else if (!(mouse_.left()) && W_click)
-        {
-            W_mouse_mov_.pop();
-            W_click = false;
-        }
-        else
-            mouse_.update(event_);
-    }
+    // static std::vector<bool> click(mouse_mov_.size(), false);
+
+    // for (int i = 0; i < mouse_mov_.size(); ++i)
+    // {
+        
+    //     if (!(mouse_mov_[i].empty()))
+    //     {
+    //         Tower * t = mouse_mov_[i].top();
+    //         if (event_.type() == MOUSEMOTION)
+    //         {
+    //             //std::cout << "move\n";
+    //             mouse_.update(event_);
+    //             //std::cout << click[i] << std::endl;
+    //             if (click[i])
+    //             {
+    //                 t->x_y(mouse_.x(), mouse_.y());
+    //                 break;
+    //             }
+    //         }
+    //         else if (event_.type() == MOUSEBUTTONDOWN)
+    //         {
+    //             std::cout << "mouse down\n";
+    //         }
+    //         else if (event_.type() == MOUSEBUTTONUP)
+    //         {
+    //             std::cout << "mouse up\n";
+    //             mouse_.update(event_);
+    //             if (in_ob(mouse_, *t))
+    //             {
+    //                 click[i] = !click[i];
+    //                 if (!click[i])
+    //                 {
+    //                     mouse_mov_[i].pop();
+    //                 }
+    //             }
+    //         }
+
+    
 }
 void Game::bloons_move()
 {
@@ -175,7 +175,10 @@ void Game::bloons_move()
                 {
                     tower_[i]->push((*p));
                     tower_[i]->run();
-                    int r = sqrt(((*p)->x() - tower_[i]->x()) * ((*p)->x() - tower_[i]->x()) + ((*p)->y() - tower_[i]->y()) * ((*p)->y() - tower_[i]->y()));
+                    int r = sqrt(((*p)->x() - tower_[i]->x()) *
+                                 ((*p)->x() - tower_[i]->x()) +
+                                 ((*p)->y() - tower_[i]->y()) *
+                                 ((*p)->y() - tower_[i]->y()));
                     if (r < tower_[i]->range())
                     {
                         //tower_[i]->push((*p));
@@ -264,7 +267,10 @@ void Game::run()
         if (event_.poll() && event_.type() == QUIT) break;
         int start = getTicks();
         mouse_move();
-        game_input(s_pressed);
+        if (event_.poll())
+        {
+            game_input(s_pressed);
+        }
         bloons_move();
         //shoot();
         for (std::list< Bullet * >::iterator p = amo_.begin();

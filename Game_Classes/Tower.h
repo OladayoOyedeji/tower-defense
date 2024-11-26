@@ -28,10 +28,12 @@ class Tower: public GameObject
 {
 public:
     Tower()
+        : range_show_(false)
     {}
     Tower(const vec2i& c, const Color& color, bool (*comp)(Ball *, Ball *))
         : GameObject(c, TOWER_RADIUS, color), target_(c),
-          victims_(comp), range_(TOWER_RANGE), mouth_(c)
+          victims_(comp), range_(TOWER_RANGE), mouth_(c),
+          range_show_(false)
     {}
     Tower(int cntrx, int cntry);
     
@@ -59,6 +61,10 @@ public:
     {
         return target_;
     }
+    void show_range()
+    {
+        range_show_ = true;
+    }
     virtual void run();
     void push(Ball * ball);
     bool in_range(const Ball * ball)
@@ -69,13 +75,14 @@ public:
     }
     //void shoot();
     static void set_surface(Surface *);
+    
+    bool range_show_;
 private:
     Line target_;
     int timer_;
     int range_;
     Line mouth_;
     static Surface * surface_;
-
     PriorityQueue< Ball * > victims_;
 };
 
@@ -114,80 +121,3 @@ public:
 
 #endif
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-  class Tower
-{
-public:
-    Tower(int x, int y, int r);
-    void anticlock()
-    {
-        da_ = abs(da_) * -1;
-        rotate();
-    }
-    void clock()
-    {
-        da_ = abs(da_);
-        rotate();
-    }
-    void rotate();
-    void draw();
-    static void set_surface(Surface * surface);
-//private:
-    int cntrx, cntry;
-    int endx, endy;
-    int mx0, my0, mx1, my1;
-    double dx; double dy;
-    int r_;
-    double a_;
-    double da_;
-    bool qdrt;
-    int w_;
-    static Surface * surface_;
-    
-};
-*/

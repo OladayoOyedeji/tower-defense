@@ -33,10 +33,6 @@ private:
     Event event_;
     std::vector<Tower *> tower_;
     // replacing those stacks
-    std::stack<Tower *> R_mouse_mov_;
-    std::stack<Tower *> B_mouse_mov_;
-    std::stack<Tower *> G_mouse_mov_;
-    std::stack<Tower *> W_mouse_mov_;
     std::vector< std::stack<Tower *> > mouse_mov_;
     
     Path path_;

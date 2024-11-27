@@ -11,8 +11,8 @@ Image Game::image_ = "images/BackGround.jpg";
 Game::Game()
     : surface_(new Surface(W, H)),
       tower_(num_R_tower + num_B_tower + num_W_tower + num_G_tower),
-      path_(5, STATUS_BAR_HEIGHT, PATH_WIDTH, PATH_HEIGHT), count_(0), a_timer_(0),
-      menu_(0, 50 + PATH_HEIGHT, W, MENU_HEIGHT), move(false),
+      path_(5, STATUS_BAR_HEIGHT, PATH_WIDTH, PATH_HEIGHT), count_(1), a_timer_(0),
+      menu_(0, 50 + PATH_HEIGHT, W, MENU_HEIGHT),
       RATE_(1000 / fps), bloons_move_(false)
 {
     Tower::set_surface(surface_);
@@ -74,43 +74,45 @@ Game::~Game()
 
 void Game::mouse_move()
 {
-    if (mouse_mov_[0].empty())
+    static std::vector<bool> move(mouse_mov_.size(), false);
+    for (int i = 0; i < mouse_mov_.size(); ++i)
     {
-        return;
-    }
-    Tower * t = mouse_mov_[0].top();
-    if (event_.type() == MOUSEMOTION)
-    {
-        //std::cout << "move\n";
-        mouse_.update(event_);
-        if (move)
+        if (!(mouse_mov_[i].empty()))
         {
-            t->x_y(mouse_.x(), mouse_.y());
-        }
-    }
-    else if (event_.type() == MOUSEBUTTONDOWN)
-    {
-        std::cout << "event poll: " << event_.poll() << "mouse down\n";
-        // do nothing ... pick up and put down
-        // happens only when the button is released
-    }
-    else if (event_.type() == MOUSEBUTTONUP)
-    {
-        std::cout << "mouse up\n";
-        mouse_.update(event_);
-        if (in_ob(mouse_, *t))
-        {
-            move = !move;
-            std::cout << move << std::endl;
-            if (!move)
+            Tower * t = mouse_mov_[i].top();
+            if (event_.type() == MOUSEMOTION)
             {
-                mouse_mov_[0].pop();
+                //std::cout << "move\n";
+                mouse_.update(event_);
+                if (move[i])
+                {
+                    t->x_y(mouse_.x(), mouse_.y());
+                    break;
+                }
+            }
+            else if (event_.type() == MOUSEBUTTONDOWN)
+            {
+                // std::cout << "event poll: " << event_.poll() << "mouse down\n";
+                // do nothing ... pick up and put down
+                // happens only when the button is released
+            }
+            else if (event_.type() == MOUSEBUTTONUP)
+            {
+                // std::cout << "mouse up\n";
+                mouse_.update(event_);
+                if (in_ob(mouse_, *t))
+                {
+                    t->show_range();
+                    move[i] = !move[i];
+                    // std::cout << move[i] << std::endl;
+                    if (!move[i])
+                    {
+                        mouse_mov_[i].pop();
+                        break;
+                    }
+                }
             }
         }
-    }
-    else
-    {
-        std::cout << "robert is not awedsome\n";
     }
 }
 void Game::bloons_move()
@@ -118,10 +120,12 @@ void Game::bloons_move()
     if (bloons_move_)
     {
         static int nums = 0;
-        if (count_ % 30 == 0 && nums != num_bloons)
+        double vel = 1.5;
+        if (count_ % 45 == 0 && nums != num_bloons)
         {
             nums++;
-            bloons_.push_back(new Ball(&path_, rand() % 30 + 10, (rand() / RAND_MAX * 4) + 1));
+            if (count_ % 300 == 0) vel = 3.5;
+            bloons_.push_back(new Ball(&path_, rand() % 20 + 10, vel));
         }
         count_++;
         for (std::list< Ball * >::iterator p = bloons_.begin();
@@ -212,7 +216,7 @@ void Game::draw()
 }
 void Game::shoot(Ball * ball, Tower * tower)
 {
-    if (a_timer_ % 100 == 0)
+    if (a_timer_ % 50 == 0)
     {
         amo_.push_back(new Bullet(tower->target(ball)));
     }
@@ -229,8 +233,8 @@ void Game::collision_detection()
 void Game::run()
 {
     bool s_pressed = false;
-    std::cout << W << ' ' << std::endl;
-    bool move = false;
+    // std::cout << W << ' ' << std::endl;
+    
     while (1)
     {
         if (event_.poll())

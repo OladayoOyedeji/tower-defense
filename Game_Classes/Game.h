@@ -44,6 +44,7 @@ private:
     Mouse mouse_;
     int count_;
     static Image image_;
+    bool move;
 };
 
 #endif

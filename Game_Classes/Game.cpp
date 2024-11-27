@@ -12,7 +12,7 @@ Game::Game()
     : surface_(new Surface(W, H)),
       tower_(num_R_tower + num_B_tower + num_W_tower + num_G_tower),
       path_(5, STATUS_BAR_HEIGHT, PATH_WIDTH, PATH_HEIGHT), count_(0), a_timer_(0),
-      menu_(0, 50 + PATH_HEIGHT, W, MENU_HEIGHT),
+      menu_(0, 50 + PATH_HEIGHT, W, MENU_HEIGHT), move(false),
       RATE_(1000 / fps), bloons_move_(false)
 {
     Tower::set_surface(surface_);
@@ -74,12 +74,14 @@ Game::~Game()
 
 void Game::mouse_move()
 {
-    static bool move = false;
-    if (mouse_mov_[0].empty()) return;
+    if (mouse_mov_[0].empty())
+    {
+        return;
+    }
     Tower * t = mouse_mov_[0].top();
     if (event_.type() == MOUSEMOTION)
     {
-        std::cout << "move\n";
+        //std::cout << "move\n";
         mouse_.update(event_);
         if (move)
         {
@@ -88,7 +90,7 @@ void Game::mouse_move()
     }
     else if (event_.type() == MOUSEBUTTONDOWN)
     {
-        std::cout << "mouse down\n";
+        std::cout << "event poll: " << event_.poll() << "mouse down\n";
         // do nothing ... pick up and put down
         // happens only when the button is released
     }
@@ -106,44 +108,10 @@ void Game::mouse_move()
             }
         }
     }
-    // static std::vector<bool> click(mouse_mov_.size(), false);
-
-    // for (int i = 0; i < mouse_mov_.size(); ++i)
-    // {
-        
-    //     if (!(mouse_mov_[i].empty()))
-    //     {
-    //         Tower * t = mouse_mov_[i].top();
-    //         if (event_.type() == MOUSEMOTION)
-    //         {
-    //             //std::cout << "move\n";
-    //             mouse_.update(event_);
-    //             //std::cout << click[i] << std::endl;
-    //             if (click[i])
-    //             {
-    //                 t->x_y(mouse_.x(), mouse_.y());
-    //                 break;
-    //             }
-    //         }
-    //         else if (event_.type() == MOUSEBUTTONDOWN)
-    //         {
-    //             std::cout << "mouse down\n";
-    //         }
-    //         else if (event_.type() == MOUSEBUTTONUP)
-    //         {
-    //             std::cout << "mouse up\n";
-    //             mouse_.update(event_);
-    //             if (in_ob(mouse_, *t))
-    //             {
-    //                 click[i] = !click[i];
-    //                 if (!click[i])
-    //                 {
-    //                     mouse_mov_[i].pop();
-    //                 }
-    //             }
-    //         }
-
-    
+    else
+    {
+        std::cout << "robert is not awedsome\n";
+    }
 }
 void Game::bloons_move()
 {
@@ -262,15 +230,22 @@ void Game::run()
 {
     bool s_pressed = false;
     std::cout << W << ' ' << std::endl;
+    bool move = false;
     while (1)
     {
-        if (event_.poll() && event_.type() == QUIT) break;
-        int start = getTicks();
-        mouse_move();
         if (event_.poll())
         {
-            game_input(s_pressed);
+            if (event_.type() == QUIT) break;
+            mouse_move();
         }
+        int start = getTicks();
+        game_input(s_pressed);
+        
+        // if (event_.poll())
+        // {
+        //std::cout << "robert is awesome" << std::endl;
+        //mouse_move();
+            //}
         bloons_move();
         //shoot();
         for (std::list< Bullet * >::iterator p = amo_.begin();

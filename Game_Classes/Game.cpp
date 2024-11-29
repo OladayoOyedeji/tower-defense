@@ -6,6 +6,8 @@ const int MENU_HEIGHT = 100;
 const int PATH_WIDTH = W - 50;
 const int PATH_HEIGHT = H - MENU_HEIGHT - 50;
 
+int num_bloons = 50;
+
 Image Game::image_ = "images/BackGround.jpg";
 
 Game::Game()
@@ -115,19 +117,47 @@ void Game::mouse_move()
         }
     }
 }
+void Game::stage(int & nums)
+{
+    static int i = 0;
+    int freq = 45 * (15 - i);
+    double vel = 1.5;
+    if (count_ % 45 == 0 && nums != ::num_bloons)
+    {
+        nums++;
+        std::cout << nums << std::endl;
+        if (count_ % freq == 0)
+            vel = rand() / RAND_MAX + 3;
+        bloons_.push_back(new Ball(&path_, rand() % 20 + 10, vel));
+    }
+    else if (nums == ::num_bloons && bloons_.size() != 0)
+    {
+        count_ = 0;
+    }
+    else if (bloons_.size() == 0 && count_ == 50)
+    {
+        nums = 0;
+        ::num_bloons += 50;
+        count_ = 0;
+        i = (i >= 15 ? i: i + 5);
+    }
+    std::cout << count_ << " size: " << bloons_.size() << std::endl;
+    count_++;
+}
 void Game::bloons_move()
 {
     if (bloons_move_)
     {
         static int nums = 0;
-        double vel = 1.5;
-        if (count_ % 45 == 0 && nums != num_bloons)
-        {
-            nums++;
-            if (count_ % 300 == 0) vel = 3.5;
-            bloons_.push_back(new Ball(&path_, rand() % 20 + 10, vel));
-        }
-        count_++;
+        // double vel = 1.5;
+        // if (count_ % 45 == 0 && nums != num_bloons)
+        // {
+        //     nums++;
+        //     if (count_ % 300 == 0) vel = 3.5;
+        //     bloons_.push_back(new Ball(&path_, rand() % 20 + 10, vel));
+        // }
+        // count_++;
+        stage(nums);
         for (std::list< Ball * >::iterator p = bloons_.begin();
              p != bloons_.end(); ++p)
         {

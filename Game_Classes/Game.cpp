@@ -125,7 +125,7 @@ void Game::stage(int & nums)
     if (count_ % 45 == 0 && nums != ::num_bloons)
     {
         nums++;
-        std::cout << nums << std::endl;
+        //std::cout << nums << std::endl;
         if (count_ % freq == 0)
             vel = rand() / RAND_MAX + 3;
         bloons_.push_back(new Ball(&path_, rand() % 20 + 10, vel));
@@ -139,9 +139,9 @@ void Game::stage(int & nums)
         nums = 0;
         ::num_bloons += 50;
         count_ = 0;
-        i = (i >= 15 ? i: i + 5);
+        i = (i - 5 >= 15 ? i: i + 5);
     }
-    std::cout << count_ << " size: " << bloons_.size() << std::endl;
+    //std::cout << count_ << " size: " << bloons_.size() << std::endl;
     count_++;
 }
 void Game::bloons_move()
@@ -175,19 +175,29 @@ void Game::bloons_move()
                 (*p)->run();
                 for (int i = 0; i < tower_.size(); ++i)
                 {
-                    tower_[i]->push((*p));
-                    tower_[i]->run();
                     int r = sqrt(((*p)->x() - tower_[i]->x()) *
                                  ((*p)->x() - tower_[i]->x()) +
                                  ((*p)->y() - tower_[i]->y()) *
                                  ((*p)->y() - tower_[i]->y()));
                     if (r < tower_[i]->range())
                     {
+                        tower_[i]->push((*p));
                         //tower_[i]->push((*p));
-                        shoot((*p), tower_[i]);
+                        
                     }
                 }
+                
             }
+        }
+        for (int i = 0; i < tower_.size(); ++i)
+        {
+                    
+            tower_[i]->run();
+            if (tower_[i]->shoot_)
+            {
+                shoot(tower_[i]);
+            }
+            
         }
     }
 }
@@ -244,13 +254,9 @@ void Game::draw()
         
     surface_->flip();
 }
-void Game::shoot(Ball * ball, Tower * tower)
+void Game::shoot(Tower * tower)
 {
-    if (a_timer_ % 50 == 0)
-    {
-        amo_.push_back(new Bullet(tower->target(ball)));
-    }
-    ++a_timer_;
+    amo_.push_back(new Bullet(tower->target()));
 }
 void Game::collision_detection()
 {

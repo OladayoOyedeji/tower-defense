@@ -41,8 +41,21 @@ void Tower::run()
 {       
     if (!(victims_.is_empty()))
     {
+        //std::cout << timer_
+        if (timer_ % 50 == 0)
+        {
+            shoot_ = true;
+        }
+        else
+        {
+            shoot_ = false;
+        }
         target(victims_.max());
         victims_.clear();
+    }
+    else
+    {
+        shoot_ = false;
     }
     ++timer_;
 }
@@ -50,6 +63,7 @@ void Tower::draw()
 {
     surface_->put_circle(pos_, radius_, color_);
     mouth_.draw();
+    target_.draw();
     if (range_show_)
     {
         surface_->put_unfilled_circle(pos_, range_, WHITE);

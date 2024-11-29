@@ -1,0 +1,4 @@
+blue priotizes the bigger objects
+the red priotizes the smaller objects
+the white priotizes the faster balls
+the grey priotizes the slower balls

@@ -4,10 +4,10 @@
 #include "include.h"
 #include <stack>
 
-const int num_R_tower = 3;
-const int num_B_tower = 3;
-const int num_W_tower = 3;
-const int num_G_tower = 3;
+const int num_R_tower = 1;
+const int num_B_tower = 1;
+const int num_W_tower = 1;
+const int num_G_tower = 1;
 const int fps = 150;
 
 class Game
@@ -21,7 +21,7 @@ public:
     void run();
     void put_background();
     void draw();
-    void shoot(Ball * ball, Tower * tower);
+    void shoot(Tower * tower);
     void collision_detection();
     void stage(int & i);
     bool bloons_move_;

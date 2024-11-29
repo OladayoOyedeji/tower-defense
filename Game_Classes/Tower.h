@@ -77,9 +77,11 @@ public:
     static void set_surface(Surface *);
     
     bool range_show_;
+    
+    int timer_;
+    bool shoot_;
 private:
     Line target_;
-    int timer_;
     int range_;
     Line mouth_;
     static Surface * surface_;

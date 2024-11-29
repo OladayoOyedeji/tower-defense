@@ -183,7 +183,8 @@ void QuadTreeNode::collision()
                         if ((*p)->pos().dist((*q)->pos()) < r)
                         {
                             (*p)->alive() = false;
-                            (*q)->alive() = false;
+                            // (*q)->alive() = false;
+                            (*q)->reduce();
                             break;
                         }
                     }

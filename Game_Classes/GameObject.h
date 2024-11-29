@@ -64,7 +64,6 @@ public:
     Color color_;
     bool alive_;
     static Surface * surface_;
-    
 };
 
 class Ball: public GameObject
@@ -73,7 +72,7 @@ public:
     Ball(Path * path, int r, double vel)
         : path_(path), GameObject(path->start(), r,
                                   path->vector(), vel, RED),
-          p(path_->begin())
+          p(path_->begin()), life_(r)
     {
         
     }
@@ -109,10 +108,19 @@ public:
         pos_.set_y(y);
     }
     
+    void reduce()
+    {
+        life_ -= 15;
+        if (life_ <= 0)
+        {
+            alive_ = false;
+        }
+    }
     virtual void run();
     
     Path * path_;
     std::list< Line * >::iterator p;
+    int life_;
 };
 
 inline

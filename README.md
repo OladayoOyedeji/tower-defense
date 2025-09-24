@@ -20,4 +20,4 @@ This project helped me explore:
 ```bash
 git clone https://github.com/OladayoOyedeji/Tower-Defense.git
 cd Tower-Defense
-make
+make; make r
